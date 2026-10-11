@@ -172,6 +172,15 @@ input.fix{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px
 .preview{border:2px dashed var(--yellow);border-radius:14px;padding:12px;margin-top:14px}
 table.people{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 table.people td,table.people th{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}
+.badge.done{background:#e8f6ee;color:var(--ok)}
+.side .who{margin:16px;font-size:13px;color:var(--muted)}
+.last{font-size:12px;font-weight:500;border-radius:999px;padding:1px 8px;margin-left:6px}
+.last.ok{background:#e8f6ee;color:var(--ok)} .last.bad{background:#fdecef;color:var(--bad)}
+a.resume{display:block;text-decoration:none;color:inherit;border-color:var(--yellow);background:#fffbea}
+a.prow{display:grid;grid-template-columns:2.2em minmax(0,1fr) 30% 3.5em;gap:10px;align-items:center;padding:8px 12px;background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;text-decoration:none;color:inherit}
+a.prow .no{color:var(--muted)} a.prow .zh{font-family:var(--zh);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+a.prow .pnum{font-size:13px;color:var(--muted);text-align:right}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0 12px}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:10px;font-size:14px;z-index:50;max-width:90vw}
 .empty{color:var(--muted);text-align:center;padding:40px 10px}
 </style>
@@ -188,8 +197,13 @@ table.people td,table.people th{padding:9px 12px;border-bottom:1px solid var(--l
 /* =====================================================================
    CONFIG — paste from Supabase → Project Settings → API
    ===================================================================== */
-const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+const SUPABASE_URL = "https://gvodqdbqjxqrfmhygsdw.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_qw2wY3WB5UYzX7-xx8Mgzg_05TWARz-"; // publishable key: safe in the browser
+/* Students log in with a username. Behind the scenes it becomes
+   <username>@USERNAME_DOMAIN (no email is ever sent to it). */
+const USERNAME_DOMAIN = "siswa.goingup.id";
+const toEmail = (u) => (u.includes("@") ? u.trim() : `${u.trim().toLowerCase()}@${USERNAME_DOMAIN}`);
+const USERNAME_RE = /^[a-z0-9_.]{3,30}$/;
 
 /* =====================================================================
    Helpers
@@ -320,6 +334,7 @@ function validateLesson(L) {
       if (a !== b) err(`${where}: zh punya ${a} potongan, py punya ${b} → "${s.zh}"`);
     } else if (HAN.test(s.zh)) warn(`${where}: py kosong → pinyin otomatis (cek ulang)`);
   };
+  if (L.title?.zh) sentence(L.title, "title", { needId: false });
   const arr = (k) => { if (L[k] === undefined) return []; if (!Array.isArray(L[k])) { err(`${k} harus array`); return []; } return L[k]; };
 
   arr("texts").forEach((t, i) => {
@@ -340,7 +355,7 @@ function validateLesson(L) {
   });
   arr("notes").forEach((n, i) => {
     const w = `notes[${i}]`; addId(n.nid, w);
-    if (!n.head?.zh) err(`${w}: head.zh kosong`);
+    if (!n.head?.zh) err(`${w}: head.zh kosong`); else sentence(n.head, `${w}.head`, { needId: false });
     if (!n.explanation) warn(`${w}: explanation kosong`);
     (n.examples || []).forEach((s, j) => sentence(s, `${w}.examples[${j}]`));
   });
@@ -359,6 +374,7 @@ function validateLesson(L) {
     if (!q.prompt) warn(`${w}: prompt kosong`);
     switch (q.type) {
       case "multiple_choice": case "tone_select":
+        if (q.stem) sentence(q.stem, `${w}.stem`, { needId: false });
         if (!Array.isArray(q.options) || q.options.length < 2) err(`${w}: options minimal 2`);
         else if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer >= q.options.length) err(`${w}: answer index di luar range`);
         if (q.type === "tone_select" && !q.hanzi) err(`${w}: hanzi kosong`);
@@ -377,7 +393,7 @@ function validateLesson(L) {
         if (!Array.isArray(q.tokens) || q.tokens.length < 2) err(`${w}: tokens minimal 2 (urutan yang benar)`);
         break;
       case "open_answer":
-        if (!q.question?.zh) err(`${w}: question.zh kosong`);
+        if (!q.question?.zh) err(`${w}: question.zh kosong`); else sentence(q.question, `${w}.question`, { needId: false });
         break;
       case "fix_error":
         if (!q.wrong) err(`${w}: wrong kosong`);
@@ -394,7 +410,7 @@ function validateLesson(L) {
    ===================================================================== */
 const S = {
   session: null, profile: null, books: [], lessons: [],
-  lesson: null, tab: "texts", attempts: {}, view: "home",
+  lesson: null, tab: "texts", attempts: {}, progress: {}, view: "home",
   showPy: store.get("py", true), showTr: store.get("tr", true),
 };
 let sb = null;
@@ -403,8 +419,8 @@ let sb = null;
    Boot + routing  (#/1b-16/vocabulary  ·  #/editor/1b-16  ·  #/students)
    ===================================================================== */
 async function boot() {
-  if (SUPABASE_URL.includes("YOUR-PROJECT") || !window.supabase) {
-    $("#app").innerHTML = `<div class="auth"><h1>Setup belum selesai</h1><p>Isi <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> di bagian atas script <code>index.html</code>.</p></div>`;
+  if (!window.supabase) {
+    $("#app").innerHTML = `<div class="auth"><h1>Gagal memuat</h1><p>Library Supabase tidak termuat. Cek koneksi internet lalu muat ulang.</p></div>`;
     return;
   }
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -427,13 +443,31 @@ async function start() {
 }
 window.addEventListener("hashchange", () => S.profile?.active && route());
 
+async function fetchAll(make) {
+  const out = []; const page = 1000;
+  for (let from = 0; ; from += page) {
+    const { data, error } = await make().range(from, from + page - 1);
+    if (error) throw error;
+    out.push(...data); if (data.length < page) return out;
+  }
+}
 async function loadIndex() {
-  const [b, l] = await Promise.all([
+  const uid = S.session.user.id;
+  const [b, l, a] = await Promise.all([
     sb.from("books").select("*").order("sort"),
-    sb.from("lessons").select("id,book,lesson_no,title_zh,title_py,title_id,status").order("lesson_no"),
+    sb.from("lesson_index").select("*").order("lesson_no"),
+    fetchAll(() => sb.from("latest_attempts").select("lesson_id,qid,correct").eq("user_id", uid)).catch((e) => { console.error(e); return []; }),
   ]);
   if (b.error || l.error) { toast("Gagal memuat daftar pelajaran."); console.error(b.error || l.error); }
   S.books = b.data || []; S.lessons = l.data || [];
+  S.progress = {};
+  a.forEach((x) => { (S.progress[x.lesson_id] ||= {})[x.qid] = x.correct; });
+}
+/* progress of one lesson: { ok, total } using the lesson's graded exercise count */
+function lessonProgress(l) {
+  const m = S.progress[l.id] || {}, total = l.graded_count || 0;
+  const ok = Math.min(total, Object.values(m).filter((v) => v === true).length);
+  return { ok, total, tried: Object.keys(m).length };
 }
 const isStaff = () => ["teacher", "admin"].includes(S.profile?.role);
 
@@ -447,19 +481,46 @@ async function route() {
     S.tab = parts[1] || firstTab(S.lesson);
     return renderLesson();
   }
+  renderHome();
+}
+const TAB_NAME = { texts: "课文 Teks", vocabulary: "生词 Kosakata", notes: "注释 Catatan", grammar: "语法 Tata Bahasa", exercises: "练习 Latihan" };
+function renderHome() {
   S.view = "home";
-  renderShell(`<div class="empty"><p style="font-size:40px;margin:0">加油！</p><p>Pilih pelajaran di menu.</p></div>`);
+  const pos = S.profile?.last_position;
+  const last = pos && S.lessons.find((l) => l.id === pos.lesson);
+  const name = S.profile?.full_name || S.profile?.username || "";
+  let tot = 0, okAll = 0;
+  S.lessons.forEach((l) => { const p = lessonProgress(l); tot += p.total; okAll += p.ok; });
+  const books = S.books.map((b) => {
+    const ls = S.lessons.filter((l) => l.book === b.id); if (!ls.length) return "";
+    return `<h3 style="margin:18px 0 8px">${esc(b.title_id)} · <span style="font-family:var(--zh)">${esc(b.title_zh)}</span></h3>` + ls.map((l) => {
+      const p = lessonProgress(l), pct = p.total ? Math.round((p.ok / p.total) * 100) : 0;
+      return `<a class="prow" href="#/${l.id}"><span class="no">${l.lesson_no}</span><span class="zh">${esc(plain(l.title_zh))}</span>
+        <span class="bar"><i style="width:${pct}%"></i></span><span class="pnum">${p.total ? `${p.ok}/${p.total}` : "—"}</span></a>`;
+    }).join("");
+  }).join("");
+  renderShell(`<div class="lhead"><div class="kicker">你好${name ? "，" + esc(name) : ""}！</div><h1 style="font-size:26px">加油！</h1></div>
+    ${last ? `<a class="card resume" href="#/${last.id}/${esc(pos.tab || "")}">
+        <div class="kicker">Lanjutkan belajar</div>
+        <div style="font-family:var(--zh);font-size:22px;font-weight:700">第${last.lesson_no}课 · ${esc(plain(last.title_zh))}</div>
+        <div class="sub">${esc((S.books.find((b) => b.id === last.book) || {}).title_id || "")} · ${esc(TAB_NAME[pos.tab] || "")}</div>
+        <span class="btn red" style="display:inline-block;margin-top:10px">Lanjutkan →</span></a>`
+      : `<div class="card"><b>Mulai belajar:</b> pilih pelajaran di bawah.</div>`}
+    ${tot ? `<div class="score"><span>Total latihan benar: <b>${okAll}/${tot}</b></span><div class="bar"><i style="width:${Math.round((okAll / tot) * 100)}%"></i></div></div>` : ""}
+    ${books || `<div class="empty">Belum ada pelajaran yang dipublikasikan.</div>`}`);
+}
+let posTimer = null;
+function savePosition(lesson, tab) {
+  const pos = { lesson, tab, at: new Date().toISOString() };
+  if (S.profile) S.profile.last_position = pos;
+  clearTimeout(posTimer);
+  posTimer = setTimeout(() => sb.rpc("save_position", { pos }).then(({ error }) => error && console.warn("position not saved", error)), 800);
 }
 async function loadLesson(id) {
   const { data, error } = await sb.from("lessons").select("*").eq("id", id).maybeSingle();
   if (error) { console.error(error); toast("Gagal memuat pelajaran."); }
   S.lesson = data ? fromRow(data) : null;
-  S.attempts = {};
-  if (data) {
-    const { data: at } = await sb.from("attempts").select("qid,correct,created_at")
-      .eq("lesson_id", id).eq("user_id", S.session.user.id).order("created_at", { ascending: false });
-    (at || []).forEach((a) => { if (!(a.qid in S.attempts)) S.attempts[a.qid] = a.correct; });
-  }
+  S.attempts = data ? (S.progress[id] ||= {}) : {};
 }
 /* DB row ⇄ the single JSON document you author */
 const fromRow = (r) => ({ ...r.content, id: r.id, book: r.book, lesson: r.lesson_no,
@@ -473,6 +534,11 @@ function toRow(L) {
 /* =====================================================================
    Shell: top bar + sidebar
    ===================================================================== */
+function progBadge(l) {
+  const p = lessonProgress(l);
+  if (!p.total || !p.tried) return "";
+  return p.ok >= p.total ? `<span class="badge done">✓</span>` : `<span class="badge">${p.ok}/${p.total}</span>`;
+}
 function renderShell(mainHtml) {
   const activeId = S.lesson?.id;
   const side = S.books.map((b) => {
@@ -481,7 +547,7 @@ function renderShell(mainHtml) {
     return `<h4>${esc(b.title_id)} · <span class="zh">${esc(b.title_zh)}</span></h4>` + ls.map((l) =>
       `<a class="l ${l.id === activeId && S.view === "lesson" ? "on" : ""}" href="#/${l.id}">
         <span class="no">${l.lesson_no}</span><span class="zh">${esc(plain(l.title_zh))}</span>
-        ${l.status === "draft" ? `<span class="badge draft">draft</span>` : ""}</a>`).join("");
+        ${l.status === "draft" ? `<span class="badge draft">draft</span>` : ""}${progBadge(l)}</a>`).join("");
   }).join("") || `<div class="empty" style="padding:20px">Belum ada pelajaran.</div>`;
   const staff = isStaff() ? `<div class="staff"><h4>Guru</h4>
       <a class="l" href="#/editor${activeId ? "/" + activeId : ""}">✎ Editor pelajaran</a>
@@ -495,7 +561,8 @@ function renderShell(mainHtml) {
       <button data-act="logout" title="Keluar">⎋</button>
     </header>
     <div class="shell">
-      <nav class="side" id="side">${side}${staff}</nav>
+      <nav class="side" id="side"><a class="l" href="#/">🏠 Beranda</a>${side}${staff}
+        <div class="who">Masuk sebagai <b>${esc(S.profile?.username || S.session?.user?.email || "")}</b></div></nav>
       <main id="main">${mainHtml}</main>
     </div>`;
 }
@@ -540,6 +607,7 @@ function renderLesson(L = S.lesson, { preview = false } = {}) {
   if (preview) return html;
   renderShell(html);
   wireExercises(L);
+  savePosition(L.id, tab);
 }
 
 function lineHtml(l, { speaker = true, size = "" } = {}) {
@@ -650,9 +718,10 @@ function viewExercises(L) {
   const ok = graded.filter((q) => S.attempts[q.qid] === true).length;
   const pct = graded.length ? Math.round((ok / graded.length) * 100) : 0;
   return `${graded.length ? `<div class="score"><span class="sc">Skor: <b>${ok}/${graded.length}</b> (${done} dicoba)</span><div class="bar"><i style="width:${pct}%"></i></div>
-      <button class="btn ghost" data-act="reset-quiz" title="Kosongkan jawaban di layar (riwayat tetap tersimpan)">Ulangi</button></div>` : ""}
+      <button class="btn ghost" data-act="reset-quiz" title="Kosongkan jawaban di layar; nilai terakhir tetap tersimpan">Kerjakan lagi</button></div>` : ""}
     ${L.exercises.map((q, i) => `<div class="q" id="q-${esc(q.qid)}" data-qid="${esc(q.qid)}">
-      <div class="qp"><span class="qn">${i + 1}.</span>${esc(q.prompt || "")}</div>
+      <div class="qp"><span class="qn">${i + 1}.</span>${esc(q.prompt || "")}
+        ${q.qid in S.attempts && L === S.lesson ? `<span class="last ${S.attempts[q.qid] ? "ok" : "bad"}">${S.attempts[q.qid] ? "✓ terakhir benar" : "✗ terakhir salah"}</span>` : ""}</div>
       <div class="qbody">${qBody(q)}</div>
       <div class="qact">${q.type === "open_answer" ? `<button class="btn ghost" data-act="reveal">Lihat contoh jawaban</button>`
         : q.type === "pinyin_match" ? "" : `<button class="btn" data-act="check">Cek</button>`}
@@ -809,7 +878,7 @@ document.addEventListener("click", (e) => {
     S.tab = where; if (L === S.lesson) location.hash = `#/${L.id}/${where}`; else refreshPreview();
     return;
   }
-  if (act === "reset-quiz" && L) { S.attempts = {}; L === S.lesson ? renderLesson() : refreshPreview(); return; }
+  if (act === "reset-quiz" && L) { L === S.lesson ? renderLesson() : (S.preview && (S.attempts = {}), refreshPreview()); return; }
 
   const box = t.closest(".q"); if (!box || !L) return;
   const q = (L.exercises || []).find((x) => x.qid === box.dataset.qid); if (!q) return;
@@ -843,8 +912,8 @@ function renderLogin() {
   S.view = "login";
   $("#app").innerHTML = `<form class="auth" id="login">
     <h1>Going Up! <span style="font-family:var(--zh)">汉语教程</span></h1>
-    <p style="color:var(--muted);margin:0 0 8px">Masuk dengan akun dari gurumu.</p>
-    <label class="field">Email<input name="email" type="email" required autocomplete="username"></label>
+    <p style="color:var(--muted);margin:0 0 8px">Masuk dengan username dan password dari gurumu.</p>
+    <label class="field">Username<input name="username" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
     <label class="field">Password<input name="password" type="password" required autocomplete="current-password"></label>
     <div class="err" id="lerr"></div>
     <button class="btn red" style="width:100%">Masuk</button>
@@ -853,14 +922,14 @@ function renderLogin() {
     e.preventDefault();
     const f = new FormData(e.target);
     $("#lerr").textContent = "";
-    const { error } = await sb.auth.signInWithPassword({ email: f.get("email"), password: f.get("password") });
-    if (error) $("#lerr").textContent = "Email atau password salah.";
+    const { error } = await sb.auth.signInWithPassword({ email: toEmail(String(f.get("username"))), password: f.get("password") });
+    if (error) $("#lerr").textContent = /confirm/i.test(error.message) ? "Akun belum dikonfirmasi. Hubungi guru." : "Username atau password salah.";
   });
 }
 function renderInactive() {
   S.view = "inactive";
   $("#app").innerHTML = `<div class="auth"><h1>Akun belum aktif</h1>
-    <p>Akun <b>${esc(S.session.user.email)}</b> sudah terdaftar, tapi belum diaktifkan oleh guru.</p>
+    <p>Akun <b>${esc(S.profile?.username || S.session.user.email)}</b> sudah terdaftar, tapi belum diaktifkan oleh guru.</p>
     <button class="btn ghost" data-act="logout">Keluar</button></div>`;
 }
 
@@ -953,14 +1022,32 @@ function refreshPreview() {
 /* =====================================================================
    Students (teachers): activate / deactivate accounts
    ===================================================================== */
+/* A second client that never stores a session, so creating a student
+   doesn't log the teacher out. */
+const signupClient = () => window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY,
+  { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: "gu-signup" } });
+
 async function renderStudents() {
   S.view = "students";
   const { data, error } = await sb.from("profiles").select("*").order("created_at", { ascending: false });
   if (error) return renderShell(`<div class="empty">Gagal memuat siswa.</div>`);
+  const att = await fetchAll(() => sb.from("latest_attempts").select("user_id,correct")).catch(() => []);
+  const stat = {}; att.forEach((a) => { const s = (stat[a.user_id] ||= { n: 0, ok: 0 }); s.n++; if (a.correct) s.ok++; });
   renderShell(`<h2 style="margin:0 0 6px">Siswa</h2>
-    <p style="color:var(--muted);font-size:14px;margin:0 0 12px">Buat akun siswa di Supabase → Authentication → Users (Add user / Invite), lalu aktifkan di sini.</p>
-    <table class="people"><thead><tr><th>Nama</th><th>Peran</th><th>Status</th><th></th></tr></thead><tbody>
-    ${data.map((p) => `<tr><td>${esc(p.full_name || "—")}</td><td>${esc(p.role)}</td>
+    <form class="card" id="newStudent" autocomplete="off">
+      <h3>Tambah siswa</h3>
+      <div class="grid3">
+        <label class="field">Nama<input name="full_name" required></label>
+        <label class="field">Username<input name="username" required pattern="[a-z0-9_.]{3,30}" title="3–30 huruf kecil, angka, titik atau _" autocapitalize="none" spellcheck="false"></label>
+        <label class="field">Password<input name="password" required minlength="6" autocomplete="new-password"></label>
+      </div>
+      <div class="err" id="serr"></div>
+      <button class="btn red">Buat akun</button>
+      <span style="color:var(--muted);font-size:13px;margin-left:8px">Akun langsung aktif. Catat password-nya untuk diberikan ke siswa.</span>
+    </form>
+    <table class="people"><thead><tr><th>Nama</th><th>Username</th><th>Peran</th><th>Latihan</th><th>Status</th><th></th></tr></thead><tbody>
+    ${data.map((p) => `<tr><td>${esc(p.full_name || "—")}</td><td>${esc(p.username || "—")}</td><td>${esc(p.role)}</td>
+      <td>${stat[p.id] ? `${stat[p.id].ok} benar / ${stat[p.id].n}` : "—"}</td>
       <td>${p.active ? "✓ aktif" : "nonaktif"}</td>
       <td>${p.role === "student" ? `<button class="btn ${p.active ? "ghost" : "red"}" data-toggle="${p.id}" data-on="${!p.active}">${p.active ? "Nonaktifkan" : "Aktifkan"}</button>` : ""}</td></tr>`).join("")}
     </tbody></table>`);
@@ -969,6 +1056,25 @@ async function renderStudents() {
     b.disabled = true;
     const { error } = await sb.rpc("set_member_active", { target: b.dataset.toggle, make_active: b.dataset.on === "true" });
     if (error) { toast("Gagal: " + error.message); b.disabled = false; return; }
+    renderStudents();
+  });
+  $("#newStudent").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target), btn = $("button", e.target), msg = $("#serr");
+    const username = String(f.get("username")).trim().toLowerCase(), password = String(f.get("password")), full_name = String(f.get("full_name")).trim();
+    msg.textContent = "";
+    if (!USERNAME_RE.test(username)) { msg.textContent = "Username: 3–30 huruf kecil, angka, titik atau _."; return; }
+    if (data.some((p) => (p.username || "").toLowerCase() === username)) { msg.textContent = "Username sudah dipakai."; return; }
+    btn.disabled = true;
+    const { data: res, error } = await signupClient().auth.signUp({ email: toEmail(username), password, options: { data: { username, full_name } } });
+    if (error || !res?.user || res.user.identities?.length === 0) {
+      btn.disabled = false;
+      msg.textContent = error ? "Gagal membuat akun: " + error.message : "Username sudah dipakai.";
+      return;
+    }
+    const act = await sb.rpc("set_member_active", { target: res.user.id, make_active: true });
+    if (act.error) toast("Akun dibuat, tapi gagal diaktifkan: " + act.error.message, 5000);
+    else toast(`Akun "${username}" dibuat dan aktif ✓`);
     renderStudents();
   });
 }

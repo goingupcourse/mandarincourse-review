@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 2,
+  "id": "3a-1",
+  "book": "3a",
+  "lesson": 1,
+  "status": "draft",
+  "title": { "zh": "离 家 的 时候", "py": "lí jiā de shíhou", "id": "Saat meninggalkan rumah" },
+  "objectives": [
+    "Memakai 终于, 果然, 只好 untuk menceritakan hasil suatu kejadian",
+    "Memakai 如果……就…… dan 对于",
+    "Memakai 而 untuk menghubungkan dua sifat",
+    "Memakai 说实话 dan 一下子 dalam bercerita"
+  ],
+
+  "vocabulary": [
+    { "vid": "v01", "hanzi": "愿望", "pinyin": "yuànwàng", "pos": ["n"], "meaning": "keinginan, harapan, cita-cita" },
+    { "vid": "v02", "hanzi": "终于", "pinyin": "zhōngyú", "pos": ["adv"], "meaning": "akhirnya" },
+    { "vid": "v03", "hanzi": "实现", "pinyin": "shíxiàn", "pos": ["v"], "meaning": "mewujudkan; terwujud" },
+    { "vid": "v04", "hanzi": "联系", "pinyin": "liánxì", "pos": ["v"], "meaning": "menghubungi" },
+    { "vid": "v05", "hanzi": "瞒", "pinyin": "mán", "pos": ["v"], "meaning": "menyembunyikan (sesuatu) dari seseorang" },
+    { "vid": "v06", "hanzi": "独生女", "pinyin": "dúshēngnǚ", "pos": ["n"], "meaning": "anak perempuan tunggal" },
+    { "vid": "v07", "hanzi": "多半", "pinyin": "duōbàn", "pos": ["adv"], "meaning": "kemungkinan besar; sebagian besar" },
+    { "vid": "v08", "hanzi": "因此", "pinyin": "yīncǐ", "pos": ["conj"], "meaning": "oleh karena itu" },
+    { "vid": "v09", "hanzi": "果然", "pinyin": "guǒrán", "pos": ["adv"], "meaning": "ternyata benar (sesuai dugaan)" },
+    { "vid": "v10", "hanzi": "实话", "pinyin": "shíhuà", "pos": ["n"], "meaning": "kata-kata jujur, kenyataan" },
+    { "vid": "v11", "hanzi": "对于", "pinyin": "duìyú", "pos": ["prep"], "meaning": "mengenai, terhadap" },
+    { "vid": "v12", "hanzi": "古老", "pinyin": "gǔlǎo", "pos": ["adj"], "meaning": "kuno, berusia tua" },
+    { "vid": "v13", "hanzi": "而", "pinyin": "ér", "pos": ["conj"], "meaning": "dan (menghubungkan dua sifat); tetapi (kontras)" },
+    { "vid": "v14", "hanzi": "鸟", "pinyin": "niǎo", "pos": ["n"], "meaning": "burung" },
+    { "vid": "v15", "hanzi": "独立", "pinyin": "dúlì", "pos": ["v"], "meaning": "mandiri, berdiri sendiri" },
+    { "vid": "v16", "hanzi": "自在", "pinyin": "zìzài", "pos": ["adj"], "meaning": "bebas, leluasa" },
+    { "vid": "v17", "hanzi": "国外", "pinyin": "guówài", "pos": ["n"], "meaning": "luar negeri" },
+    { "vid": "v18", "hanzi": "考虑", "pinyin": "kǎolǜ", "pos": ["v"], "meaning": "mempertimbangkan, memikirkan" },
+    { "vid": "v19", "hanzi": "今后", "pinyin": "jīnhòu", "pos": ["n"], "meaning": "mulai sekarang, ke depannya" },
+    { "vid": "v20", "hanzi": "事情", "pinyin": "shìqing", "pos": ["n"], "meaning": "hal, urusan" },
+    { "vid": "v21", "hanzi": "改变", "pinyin": "gǎibiàn", "pos": ["v"], "meaning": "mengubah; berubah" },
+    { "vid": "v22", "hanzi": "想法", "pinyin": "xiǎngfǎ", "pos": ["n"], "meaning": "pemikiran, ide" },
+    { "vid": "v23", "hanzi": "视频", "pinyin": "shìpín", "pos": ["n"], "meaning": "video" },
+    { "vid": "v24", "hanzi": "临", "pinyin": "lín", "pos": ["prep"], "meaning": "menjelang, sesaat sebelum" },
+    { "vid": "v25", "hanzi": "拼命", "pinyin": "pīnmìng", "pos": ["adv"], "meaning": "mati-matian, sekuat tenaga" },
+    { "vid": "v26", "hanzi": "塞", "pinyin": "sāi", "pos": ["v"], "meaning": "menjejalkan, memasukkan dengan paksa" },
+    { "vid": "v27", "hanzi": "离别", "pinyin": "líbié", "pos": ["v"], "meaning": "berpisah" },
+    { "vid": "v28", "hanzi": "望", "pinyin": "wàng", "pos": ["v"], "meaning": "memandang (ke jauh)" },
+    { "vid": "v29", "hanzi": "挥", "pinyin": "huī", "pos": ["v"], "meaning": "melambaikan" },
+    { "vid": "v30", "hanzi": "眼泪", "pinyin": "yǎnlèi", "pos": ["n"], "meaning": "air mata" },
+    { "vid": "v31", "hanzi": "恋恋不舍", "pinyin": "liànliàn-bùshě", "pos": ["idiom"], "meaning": "berat hati untuk berpisah" },
+    { "vid": "v32", "hanzi": "嘱咐", "pinyin": "zhǔfù", "pos": ["v"], "meaning": "berpesan, menasihati" },
+    { "vid": "v33", "hanzi": "表达", "pinyin": "biǎodá", "pos": ["v"], "meaning": "mengungkapkan (pikiran, perasaan)" },
+    { "vid": "v34", "hanzi": "想念", "pinyin": "xiǎngniàn", "pos": ["v"], "meaning": "merindukan" },
+    { "vid": "v35", "hanzi": "放心", "pinyin": "fàng xīn", "pos": ["v"], "meaning": "merasa tenang, tidak khawatir" },
+    { "vid": "v36", "hanzi": "逗", "pinyin": "dòu", "pos": ["v"], "meaning": "membuat tertawa, menggoda" },
+    { "vid": "v37", "hanzi": "哈哈大笑", "pinyin": "hāhā-dàxiào", "pos": ["idiom"], "meaning": "tertawa terbahak-bahak" }
+  ],
+
+  "notes": [
+    {
+      "nid": "n1",
+      "head": { "zh": "[[说 实话]] ， ……", "py": "shuō shíhuà , …", "id": "Jujur saja, …" },
+      "explanation": "Dipakai di awal kalimat untuk mengantar **pendapat atau perasaan yang jujur**. Mirip \"jujur saja / sebenarnya\".",
+      "examples": [ { "zh": "说 实话 ， 我 不 太 喜欢 这个 电影 。", "py": "shuō shíhuà , wǒ bú tài xǐhuan zhège diànyǐng .", "id": "Jujur saja, saya kurang suka film ini." } ]
+    },
+    {
+      "nid": "n2",
+      "head": { "zh": "去 国外 [[过 一 年]]", "py": "qù guówài guò yì nián", "id": "pergi ke luar negeri selama setahun" },
+      "explanation": "**过 + jangka waktu** = menjalani / melewatkan waktu tersebut (tinggal, hidup).",
+      "examples": [ { "zh": "我 想 在 巴厘 岛 过 一 个 月 。", "py": "wǒ xiǎng zài Bālí Dǎo guò yí ge yuè .", "id": "Saya ingin menghabiskan sebulan di Bali." } ]
+    },
+    {
+      "nid": "n3",
+      "head": { "zh": "她 [[一下子]] 哭 了 。", "py": "tā yíxiàzi kū le .", "id": "Dia langsung menangis." },
+      "explanation": "**一下子** sebagai keterangan = seketika, tiba-tiba. Menunjukkan perubahan atau tindakan terjadi **sangat cepat**.",
+      "examples": [ { "zh": "天气 一下子 冷 了 。", "py": "tiānqì yíxiàzi lěng le .", "id": "Cuaca tiba-tiba jadi dingin." } ]
+    }
+  ],
+
+  "grammar": [
+    {
+      "gid": "u1", "kind": "usage", "title": "终于",
+      "word": { "hanzi": "终于", "pinyin": "zhōngyú", "pos": ["adv"], "meaning": "akhirnya" },
+      "explanation": "Setelah **lama menunggu atau berusaha**, hasil yang diharapkan akhirnya terjadi. Biasanya diikuti verba + 了.",
+      "patterns": [ [ { "kind": "slot", "text": "Subjek" }, { "kind": "fixed", "text": "终于", "pinyin": "zhōngyú" }, { "kind": "slot", "text": "Verba" }, { "kind": "fixed", "text": "了", "pinyin": "le" } ] ],
+      "examples": [ { "zh": "我 等 了 很 久 ， 他 终于 来 了 。", "py": "wǒ děng le hěn jiǔ , tā zhōngyú lái le .", "id": "Saya menunggu lama, akhirnya dia datang." } ]
+    },
+    {
+      "gid": "u2", "kind": "usage", "title": "一切",
+      "word": { "hanzi": "一切", "pinyin": "yíqiè", "pos": ["pron"], "meaning": "semua, segala sesuatu" },
+      "explanation": "Berarti **semuanya**. Sering dipakai bersama **都**: 一切都……",
+      "examples": [ { "zh": "这里 的 一切 都 很 新 。", "py": "zhèlǐ de yíqiè dōu hěn xīn .", "id": "Semua yang ada di sini serba baru." } ]
+    },
+    {
+      "gid": "u3", "kind": "usage", "title": "如果……就……",
+      "word": { "hanzi": "如果", "pinyin": "rúguǒ", "pos": ["conj"], "meaning": "jika, kalau" },
+      "explanation": "Menyatakan **syarat**. Bagian kedua sering memakai **就**.",
+      "patterns": [ [ { "kind": "fixed", "text": "如果", "pinyin": "rúguǒ" }, { "kind": "slot", "text": "Syarat" }, { "kind": "fixed", "text": "，就", "pinyin": "jiù" }, { "kind": "slot", "text": "Akibat" } ] ],
+      "examples": [ { "zh": "如果 你 累 了 ， 就 休息 一下 吧 。", "py": "rúguǒ nǐ lèi le , jiù xiūxi yíxià ba .", "id": "Kalau kamu capek, istirahat sebentar saja." } ]
+    },
+    {
+      "gid": "u4", "kind": "usage", "title": "果然",
+      "word": { "hanzi": "果然", "pinyin": "guǒrán", "pos": ["adv"], "meaning": "ternyata benar" },
+      "explanation": "Hasilnya **sama dengan yang sudah diduga atau dikatakan** sebelumnya. Bedanya dengan 终于: 果然 = sesuai dugaan; 终于 = setelah lama menunggu.",
+      "examples": [ { "zh": "他 说 今天 会 很 热 ， 果然 很 热 。", "py": "tā shuō jīntiān huì hěn rè , guǒrán hěn rè .", "id": "Dia bilang hari ini akan panas, ternyata memang panas." } ]
+    },
+    {
+      "gid": "u5", "kind": "usage", "title": "对于",
+      "word": { "hanzi": "对于", "pinyin": "duìyú", "pos": ["prep"], "meaning": "mengenai, terhadap" },
+      "explanation": "Memperkenalkan **topik** yang dibicarakan, biasanya di awal kalimat.\n\nUntuk \"**bagi saya / menurut saya**\" pakai **对……来说**, bukan ~~对于我~~ saja.",
+      "examples": [ { "zh": "对于 这 件 事 ， 我 还 没 想好 。", "py": "duìyú zhè jiàn shì , wǒ hái méi xiǎnghǎo .", "id": "Mengenai hal ini, saya belum memutuskan." } ]
+    },
+    {
+      "gid": "u6", "kind": "usage", "title": "而",
+      "word": { "hanzi": "而", "pinyin": "ér", "pos": ["conj"], "meaning": "dan; tetapi" },
+      "explanation": "Menghubungkan **dua sifat** (dan) atau dua hal yang **berlawanan** (tetapi). Gaya bahasa agak tulis.",
+      "examples": [ { "zh": "这个 城市 古老 而 美丽 。", "py": "zhège chéngshì gǔlǎo ér měilì .", "id": "Kota ini tua dan indah." } ]
+    },
+    {
+      "gid": "u7", "kind": "usage", "title": "只好",
+      "word": { "hanzi": "只好", "pinyin": "zhǐhǎo", "pos": ["adv"], "meaning": "terpaksa" },
+      "explanation": "**Tidak ada pilihan lain**, jadi terpaksa melakukan sesuatu. Diletakkan sebelum verba.",
+      "examples": [ { "zh": "没有 公共汽车 了 ， 我 只好 走 回 家 。", "py": "méiyǒu gōnggòngqìchē le , wǒ zhǐhǎo zǒu huí jiā .", "id": "Sudah tidak ada bus, saya terpaksa jalan kaki pulang." } ]
+    }
+  ],
+
+  "exercises": [
+    { "qid": "q01", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "等了两个小时，公共汽车___来了。", "id": "Setelah menunggu dua jam, akhirnya busnya datang.",
+      "answers": [["终于"]], "wordBank": ["终于", "果然", "只好", "如果"], "ref": "u1" },
+    { "qid": "q02", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "天气预报说下午有雨，下午___下雨了。", "id": "Ramalan cuaca bilang sore hujan, ternyata sore memang hujan.",
+      "answers": [["果然"]], "wordBank": ["终于", "果然", "只好", "如果"], "ref": "u4" },
+    { "qid": "q03", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "商店已经关门了，我们___明天再来。", "id": "Tokonya sudah tutup, kita terpaksa datang lagi besok.",
+      "answers": [["只好"]], "wordBank": ["终于", "果然", "只好", "如果"], "ref": "u7" },
+    { "qid": "q04", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "___明天不下雨，我们就去海边。", "id": "Kalau besok tidak hujan, kita ke pantai.",
+      "answers": [["如果"]], "wordBank": ["终于", "果然", "只好", "如果"], "ref": "u3" },
+    { "qid": "q05", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "___这个问题，大家的想法不一样。", "id": "Mengenai masalah ini, pendapat semua orang berbeda.",
+      "answers": [["对于"]], "wordBank": ["对于", "因此", "而"], "ref": "u5" },
+    { "qid": "q06", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "他每天练习说汉语，___进步很快。", "id": "Dia berlatih bicara bahasa Mandarin setiap hari, karena itu kemajuannya cepat.",
+      "answers": [["因此"]], "wordBank": ["对于", "因此", "而"], "ref": "v08" },
+    { "qid": "q07", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "巴厘岛是一个美丽___安静的地方。", "id": "Bali adalah tempat yang indah dan tenang.",
+      "answers": [["而"]], "wordBank": ["对于", "因此", "而"], "ref": "u6" },
+    { "qid": "q08", "type": "multiple_choice", "prompt": "Arti 一下子 dalam kalimat ini adalah…",
+      "stem": { "zh": "听到 这个 消息 ， 她 一下子 哭 了 。", "py": "tīngdào zhège xiāoxi , tā yíxiàzi kū le ." },
+      "options": ["seketika, tiba-tiba", "pelan-pelan", "hanya sebentar", "sekali lagi"],
+      "answer": 0, "ref": "n3" },
+    { "qid": "q09", "type": "multiple_choice", "prompt": "说实话 dipakai untuk…",
+      "stem": { "zh": "说 实话 ， 我 不 太 想 去 。", "py": "shuō shíhuà , wǒ bú tài xiǎng qù ." },
+      "options": ["menanyakan pendapat orang lain", "mengantar pendapat yang jujur", "menyatakan janji", "mengganti topik pembicaraan"],
+      "answer": 1, "ref": "n1" },
+    { "qid": "q10", "type": "multiple_choice", "prompt": "Pilih arti yang tepat.",
+      "stem": { "zh": "到 了 这里 以后 ， 一切 都 很 好 。", "py": "dào le zhèlǐ yǐhòu , yíqiè dōu hěn hǎo ." },
+      "options": ["Setelah sampai di sini, semuanya baik-baik saja.", "Setelah sampai di sini, ada satu hal yang baik.", "Sebelum ke sini, semuanya baik.", "Setelah sampai di sini, semuanya lebih baik dari dulu."],
+      "answer": 0, "ref": "u2" },
+    { "qid": "q11", "type": "multiple_choice", "prompt": "Mana yang paling tepat?",
+      "stem": { "zh": "我 早 就 觉得 他 会 赢 ， 他 ___ 赢 了 。", "py": "wǒ zǎo jiù juéde tā huì yíng , tā ___ yíng le ." },
+      "options": ["终于", "果然", "只好", "因此"],
+      "answer": 1, "ref": "u4", "explanation": "Sudah diduga sebelumnya → **果然**." },
+    { "qid": "q12", "type": "pinyin_match", "prompt": "Pasangkan Hanzi dengan pinyin-nya.",
+      "pairs": [
+        { "left": "愿望", "right": "yuànwàng" }, { "left": "嘱咐", "right": "zhǔfù" }, { "left": "眼泪", "right": "yǎnlèi" },
+        { "left": "考虑", "right": "kǎolǜ" }, { "left": "独立", "right": "dúlì" }
+      ] },
+    { "qid": "q13", "type": "pinyin_match", "prompt": "Pasangkan Hanzi dengan artinya.",
+      "pairs": [
+        { "left": "想念", "right": "merindukan" }, { "left": "放心", "right": "merasa tenang" }, { "left": "瞒", "right": "menyembunyikan" },
+        { "left": "联系", "right": "menghubungi" }, { "left": "改变", "right": "mengubah" }
+      ] },
+    { "qid": "q14", "type": "tone_select", "prompt": "Pilih pinyin yang benar.", "hanzi": "塞",
+      "options": ["sāi", "sái", "sǎi", "sài"], "answer": 0, "ref": "v26" },
+    { "qid": "q15", "type": "tone_select", "prompt": "Pilih pinyin yang benar.", "hanzi": "临",
+      "options": ["līn", "lín", "lǐn", "lìn"], "answer": 1, "ref": "v24" },
+    { "qid": "q16", "type": "reorder", "prompt": "Susun menjadi kalimat yang benar.",
+      "tokens": ["我", "终于", "实现", "了", "这个", "愿望"],
+      "id": "Saya akhirnya mewujudkan keinginan ini.", "ref": "u1" },
+    { "qid": "q17", "type": "reorder", "prompt": "Susun menjadi kalimat yang benar.",
+      "tokens": ["我们", "只好", "明天", "再", "去"],
+      "id": "Kita terpaksa pergi lagi besok.", "ref": "u7" },
+    { "qid": "q18", "type": "fix_error", "prompt": "Perbaiki kalimat ini.",
+      "wrong": "对于我，学汉语很有意思。",
+      "right": ["对我来说，学汉语很有意思。", "对于我来说，学汉语很有意思。"],
+      "explanation": "\"Bagi saya\" = **对我来说**.", "ref": "u5" },
+    { "qid": "q19", "type": "fix_error", "prompt": "Perbaiki kalimat ini.",
+      "wrong": "你放心我吧。", "right": ["你放心吧。", "你对我放心吧。"],
+      "explanation": "**放心** tidak langsung diikuti objek orang. Pakai 放心吧 atau 对……放心.", "ref": "v35" },
+    { "qid": "q20", "type": "open_answer", "prompt": "Jawab tentang dirimu.",
+      "question": { "zh": "你 第一 次 离开 家 的 时候 ， 心里 觉得 怎么样 ？", "py": "nǐ dì-yī cì líkāi jiā de shíhou , xīnli juéde zěnmeyàng ?", "id": "Waktu pertama kali meninggalkan rumah, bagaimana perasaanmu?" },
+      "model": "我第一次离开家的时候，心里又高兴又难过。" },
+    { "qid": "q21", "type": "open_answer", "prompt": "Jawab dengan memakai 如果……就…….",
+      "question": { "zh": "如果 你 有 机会 去 国外 过 一 年 ， 你 想 去 哪儿 ？", "py": "rúguǒ nǐ yǒu jīhuì qù guówài guò yì nián , nǐ xiǎng qù nǎr ?", "id": "Kalau kamu punya kesempatan tinggal setahun di luar negeri, kamu mau ke mana?" },
+      "model": "如果我有机会去国外过一年，我就去中国学习汉语。" }
+  ]
+}

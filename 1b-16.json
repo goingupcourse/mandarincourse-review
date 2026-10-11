@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 2,
+  "id": "1b-16",
+  "book": "1b",
+  "lesson": 16,
+  "status": "draft",
+  "title": { "zh": "你 常 去 图书馆 吗 ？", "py": "nǐ cháng qù túshūguǎn ma ?", "id": "Kamu sering ke perpustakaan?" },
+  "objectives": [
+    "Menceritakan kebiasaan dengan 常常, 有时候, 总是, 很少",
+    "Menaruh kata waktu (晚上, 周末…) di posisi yang benar",
+    "Membedakan 还是 (pertanyaan) dan 或者 (pernyataan)",
+    "Mengajak orang dengan ……，好吗？ dan 咱们……吧"
+  ],
+
+  "vocabulary": [
+    { "vid": "v01", "hanzi": "现在", "pinyin": "xiànzài", "pos": ["n"], "meaning": "sekarang" },
+    { "vid": "v02", "hanzi": "跟", "pinyin": "gēn", "pos": ["prep", "v"], "meaning": "dengan, bersama; mengikuti",
+      "examples": [ { "zh": "我 跟 朋友 一起 去 。", "py": "wǒ gēn péngyou yìqǐ qù .", "id": "Saya pergi bersama teman." } ] },
+    { "vid": "v03", "hanzi": "一起", "pinyin": "yìqǐ", "pos": ["adv"], "meaning": "bersama-sama" },
+    { "vid": "v04", "hanzi": "咱们", "pinyin": "zánmen", "pos": ["pron"], "meaning": "kita (termasuk lawan bicara)" },
+    { "vid": "v05", "hanzi": "走", "pinyin": "zǒu", "pos": ["v"], "meaning": "berjalan; pergi, berangkat" },
+    { "vid": "v06", "hanzi": "常（常）", "pinyin": "cháng (cháng)", "pos": ["adv"], "meaning": "sering" },
+    { "vid": "v07", "hanzi": "借", "pinyin": "jiè", "pos": ["v"], "meaning": "meminjam; meminjamkan" },
+    { "vid": "v08", "hanzi": "有时候", "pinyin": "yǒu shíhou", "pos": [], "meaning": "kadang-kadang",
+      "sub": [ { "hanzi": "时候", "pinyin": "shíhou", "pos": ["n"], "meaning": "waktu, saat" } ] },
+    { "vid": "v09", "hanzi": "上网", "pinyin": "shàng wǎng", "pos": ["v"], "meaning": "online, berselancar di internet",
+      "sub": [ { "hanzi": "网", "pinyin": "wǎng", "pos": ["n"], "meaning": "jaring; internet" } ] },
+    { "vid": "v10", "hanzi": "查", "pinyin": "chá", "pos": ["v"], "meaning": "mencari (informasi), memeriksa" },
+    { "vid": "v11", "hanzi": "资料", "pinyin": "zīliào", "pos": ["n"], "meaning": "bahan, data" },
+    { "vid": "v12", "hanzi": "总（是）", "pinyin": "zǒng (shì)", "pos": ["adv"], "meaning": "selalu" },
+    { "vid": "v13", "hanzi": "宿舍", "pinyin": "sùshè", "pos": ["n"], "meaning": "asrama" },
+    { "vid": "v14", "hanzi": "安静", "pinyin": "ānjìng", "pos": ["adj"], "meaning": "tenang, sepi" },
+    { "vid": "v15", "hanzi": "晚上", "pinyin": "wǎnshang", "pos": ["n"], "meaning": "malam" },
+    { "vid": "v16", "hanzi": "复习", "pinyin": "fùxí", "pos": ["v"], "meaning": "mengulang pelajaran" },
+    { "vid": "v17", "hanzi": "课文", "pinyin": "kèwén", "pos": ["n"], "meaning": "teks pelajaran" },
+    { "vid": "v18", "hanzi": "预习", "pinyin": "yùxí", "pos": ["v"], "meaning": "mempelajari lebih dulu (sebelum kelas)" },
+    { "vid": "v19", "hanzi": "生词", "pinyin": "shēngcí", "pos": ["n"], "meaning": "kosakata baru" },
+    { "vid": "v20", "hanzi": "或者", "pinyin": "huòzhě", "pos": ["conj"], "meaning": "atau (dalam pernyataan)" },
+    { "vid": "v21", "hanzi": "练习", "pinyin": "liànxí", "pos": ["n", "v"], "meaning": "latihan; berlatih" },
+    { "vid": "v22", "hanzi": "聊天儿", "pinyin": "liáo tiānr", "pos": ["v"], "meaning": "mengobrol" },
+    { "vid": "v23", "hanzi": "发", "pinyin": "fā", "pos": ["v"], "meaning": "mengirim" },
+    { "vid": "v24", "hanzi": "微信", "pinyin": "wēixìn", "pos": ["n"], "meaning": "WeChat; pesan WeChat" },
+    { "vid": "v25", "hanzi": "收发", "pinyin": "shōufā", "pos": ["v"], "meaning": "menerima dan mengirim (pesan, surat)",
+      "sub": [ { "hanzi": "收", "pinyin": "shōu", "pos": ["v"], "meaning": "menerima" } ] },
+    { "vid": "v26", "hanzi": "邮件", "pinyin": "yóujiàn", "pos": ["n"], "meaning": "surat; email" },
+    { "vid": "v27", "hanzi": "电影", "pinyin": "diànyǐng", "pos": ["n"], "meaning": "film" },
+    { "vid": "v28", "hanzi": "电视剧", "pinyin": "diànshìjù", "pos": ["n"], "meaning": "serial TV, drama",
+      "sub": [ { "hanzi": "电视", "pinyin": "diànshì", "pos": ["n"], "meaning": "televisi" } ] },
+    { "vid": "v29", "hanzi": "休息", "pinyin": "xiūxi", "pos": ["v"], "meaning": "beristirahat" },
+    { "vid": "v30", "hanzi": "公园", "pinyin": "gōngyuán", "pos": ["n"], "meaning": "taman" },
+    { "vid": "v31", "hanzi": "超市", "pinyin": "chāoshì", "pos": ["n"], "meaning": "supermarket" },
+    { "vid": "v32", "hanzi": "东西", "pinyin": "dōngxi", "pos": ["n"], "meaning": "barang, benda" }
+  ],
+
+  "notes": [
+    {
+      "nid": "n1",
+      "head": { "zh": "…… ， [[好 吗]] ？", "py": "… , hǎo ma ?", "id": "…, oke?" },
+      "explanation": "Kalimat pernyataan + **好吗？** = mengusulkan sesuatu dan minta persetujuan lawan bicara. Nadanya sopan.",
+      "examples": [ { "zh": "晚上 咱们 一起 看 电影 ， 好 吗 ？", "py": "wǎnshang zánmen yìqǐ kàn diànyǐng , hǎo ma ?", "id": "Nanti malam kita nonton film bareng, oke?" } ]
+    },
+    {
+      "nid": "n2",
+      "head": { "zh": "[[咱们]] 走 吧 。", "py": "zánmen zǒu ba .", "id": "Ayo kita pergi." },
+      "explanation": "**咱们** = kita, **selalu termasuk** orang yang diajak bicara. **我们** bisa \"kita\" atau \"kami\" (tidak termasuk lawan bicara).",
+      "examples": [ { "zh": "咱们 去 超市 吧 。", "py": "zánmen qù chāoshì ba .", "id": "Yuk kita ke supermarket." } ]
+    },
+    {
+      "nid": "n3",
+      "head": { "zh": "咱们 走 [[吧]] 。", "py": "zánmen zǒu ba .", "id": "Ayo kita pergi." },
+      "explanation": "**吧** di akhir kalimat = mengajak atau menyarankan, mirip \"yuk / ayo\"."
+    },
+    {
+      "nid": "n4",
+      "head": { "zh": "我 [[很 少]] 看 。", "py": "wǒ hěn shǎo kàn .", "id": "Saya jarang menonton." },
+      "explanation": "**很少 + verba** = jarang melakukan sesuatu. Lawannya **常常**.",
+      "examples": [ { "zh": "我 很 少 喝 咖啡 。", "py": "wǒ hěn shǎo hē kāfēi .", "id": "Saya jarang minum kopi." } ]
+    }
+  ],
+
+  "grammar": [
+    {
+      "gid": "g1",
+      "kind": "grammar",
+      "title": "Kata waktu sebagai keterangan",
+      "explanation": "Kata waktu (晚上, 现在, 周末, 星期六…) diletakkan **sebelum verba** — boleh setelah subjek, atau di awal kalimat. **Tidak boleh** di akhir kalimat seperti bahasa Indonesia.",
+      "patterns": [
+        [ { "kind": "slot", "text": "Subjek" }, { "kind": "slot", "text": "Waktu" }, { "kind": "slot", "text": "Verba" }, { "kind": "slot", "text": "Objek" } ],
+        [ { "kind": "slot", "text": "Waktu" }, { "kind": "slot", "text": "Subjek" }, { "kind": "slot", "text": "Verba" }, { "kind": "slot", "text": "Objek" } ]
+      ],
+      "examples": [
+        { "zh": "我 晚上 复习 课文 。", "py": "wǒ wǎnshang fùxí kèwén .", "id": "Malam hari saya mengulang teks pelajaran." },
+        { "zh": "星期六 我们 去 公园 。", "py": "Xīngqīliù wǒmen qù gōngyuán .", "id": "Hari Sabtu kami ke taman." }
+      ],
+      "mistakes": [ { "wrong": "我去超市晚上。", "right": "我晚上去超市。", "why": "Kata waktu harus sebelum verba." } ]
+    },
+    {
+      "gid": "g2",
+      "kind": "grammar",
+      "title": "还是 dan 或者 — dua-duanya \"atau\"",
+      "explanation": "**还是** dipakai dalam **kalimat tanya** pilihan (lawan bicara harus memilih).\n\n**或者** dipakai dalam **kalimat pernyataan** (dua-duanya mungkin).",
+      "patterns": [
+        [ { "kind": "slot", "text": "A" }, { "kind": "fixed", "text": "还是", "pinyin": "háishi" }, { "kind": "slot", "text": "B" }, { "kind": "fixed", "text": "？" } ],
+        [ { "kind": "slot", "text": "A" }, { "kind": "fixed", "text": "或者", "pinyin": "huòzhě" }, { "kind": "slot", "text": "B" }, { "kind": "fixed", "text": "。" } ]
+      ],
+      "examples": [
+        { "zh": "你 喝 茶 还是 喝 咖啡 ？", "py": "nǐ hē chá háishi hē kāfēi ?", "id": "Kamu minum teh atau kopi?" },
+        { "zh": "周末 我 去 公园 或者 去 超市 。", "py": "zhōumò wǒ qù gōngyuán huòzhě qù chāoshì .", "id": "Akhir pekan saya ke taman atau ke supermarket." }
+      ],
+      "mistakes": [ { "wrong": "你喝茶或者喝咖啡？", "right": "你喝茶还是喝咖啡？", "why": "Pertanyaan pilihan memakai 还是." } ]
+    }
+  ],
+
+  "exercises": [
+    { "qid": "q01", "type": "multiple_choice", "prompt": "Pilih arti yang tepat.",
+      "stem": { "zh": "咱们 一起 去 超市 吧 。", "py": "zánmen yìqǐ qù chāoshì ba ." },
+      "options": ["Yuk kita ke supermarket bareng.", "Kami sudah pergi ke supermarket.", "Kamu ke supermarket sendirian saja.", "Mereka sering ke supermarket."],
+      "answer": 0, "ref": "n3", "explanation": "咱们 = kita (termasuk lawan bicara), 吧 = ajakan." },
+    { "qid": "q02", "type": "multiple_choice", "prompt": "Pilih arti yang tepat.",
+      "stem": { "zh": "我 很 少 看 电视剧 。", "py": "wǒ hěn shǎo kàn diànshìjù ." },
+      "options": ["Saya sedikit menonton serial TV.", "Saya jarang menonton serial TV.", "Saya tidak pernah menonton serial TV.", "Saya sering menonton serial TV."],
+      "answer": 1, "ref": "n4" },
+    { "qid": "q03", "type": "multiple_choice", "prompt": "Mana kalimat yang BENAR?",
+      "options": ["我复习课文晚上。", "我晚上复习课文。", "复习课文我晚上。", "我复习晚上课文。"],
+      "answer": 1, "ref": "g1", "explanation": "Kata waktu sebelum verba." },
+    { "qid": "q04", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "你去图书馆___去宿舍？", "id": "Kamu ke perpustakaan atau ke asrama?",
+      "answers": [["还是"]], "wordBank": ["还是", "或者", "和"], "ref": "g2" },
+    { "qid": "q05", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "周末我去公园___去超市。", "id": "Akhir pekan saya ke taman atau ke supermarket.",
+      "answers": [["或者"]], "wordBank": ["还是", "或者", "和"], "ref": "g2" },
+    { "qid": "q06", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "我___朋友一起去公园。", "id": "Saya pergi ke taman bersama teman.",
+      "answers": [["跟"]], "wordBank": ["跟", "也", "常"], "ref": "v02" },
+    { "qid": "q07", "type": "fill_blank", "prompt": "Isi dua bagian kosong.",
+      "zh": "我___在宿舍看书，宿舍很___。", "id": "Saya selalu membaca di asrama, asramanya sangat tenang.",
+      "answers": [["总是"], ["安静"]], "wordBank": ["总是", "安静", "借", "查"], "ref": "v12" },
+    { "qid": "q08", "type": "fill_blank", "prompt": "Pilih kata yang tepat.",
+      "zh": "我常去图书馆___书，有时候上网___资料。", "id": "Saya sering ke perpustakaan meminjam buku, kadang online mencari bahan.",
+      "answers": [["借"], ["查"]], "wordBank": ["借", "查", "发", "收"], "ref": "v07" },
+    { "qid": "q09", "type": "pinyin_match", "prompt": "Pasangkan Hanzi dengan pinyin-nya.",
+      "pairs": [
+        { "left": "宿舍", "right": "sùshè" }, { "left": "资料", "right": "zīliào" }, { "left": "休息", "right": "xiūxi" },
+        { "left": "邮件", "right": "yóujiàn" }, { "left": "超市", "right": "chāoshì" }
+      ] },
+    { "qid": "q10", "type": "pinyin_match", "prompt": "Pasangkan Hanzi dengan artinya.",
+      "pairs": [
+        { "left": "复习", "right": "mengulang pelajaran" }, { "left": "预习", "right": "belajar sebelum kelas" },
+        { "left": "聊天儿", "right": "mengobrol" }, { "left": "安静", "right": "tenang, sepi" }
+      ] },
+    { "qid": "q11", "type": "tone_select", "prompt": "Pilih pinyin yang benar.", "hanzi": "借",
+      "options": ["jiē", "jié", "jiě", "jiè"], "answer": 3, "ref": "v07" },
+    { "qid": "q12", "type": "tone_select", "prompt": "Pilih pinyin yang benar.", "hanzi": "总",
+      "options": ["zōng", "zóng", "zǒng", "zòng"], "answer": 2, "ref": "v12" },
+    { "qid": "q13", "type": "reorder", "prompt": "Susun menjadi kalimat yang benar.",
+      "tokens": ["我", "晚上", "常常", "复习", "课文"],
+      "alsoAccept": [["晚上", "我", "常常", "复习", "课文"]],
+      "id": "Malam hari saya sering mengulang teks pelajaran.", "ref": "g1" },
+    { "qid": "q14", "type": "reorder", "prompt": "Susun menjadi kalimat yang benar.",
+      "tokens": ["我", "有时候", "跟", "朋友", "聊天儿"],
+      "alsoAccept": [["有时候", "我", "跟", "朋友", "聊天儿"]],
+      "id": "Kadang-kadang saya mengobrol dengan teman.", "ref": "v08" },
+    { "qid": "q15", "type": "fix_error", "prompt": "Perbaiki kalimat ini.",
+      "wrong": "我去超市晚上。", "right": ["我晚上去超市。", "晚上我去超市。"],
+      "explanation": "Kata waktu harus sebelum verba.", "ref": "g1" },
+    { "qid": "q16", "type": "fix_error", "prompt": "Perbaiki kalimat ini.",
+      "wrong": "你喝茶或者喝咖啡？", "right": ["你喝茶还是喝咖啡？"],
+      "explanation": "Pertanyaan pilihan memakai **还是**.", "ref": "g2" },
+    { "qid": "q17", "type": "open_answer", "prompt": "Jawab tentang dirimu.",
+      "question": { "zh": "晚上 你 常 做 什么 ？", "py": "wǎnshang nǐ cháng zuò shénme ?", "id": "Malam hari kamu biasanya ngapain?" },
+      "model": "晚上我常常复习课文，有时候上网跟朋友聊天儿。" },
+    { "qid": "q18", "type": "open_answer", "prompt": "Jawab tentang dirimu (pakai 或者).",
+      "question": { "zh": "周末 你 做 什么 ？", "py": "zhōumò nǐ zuò shénme ?", "id": "Akhir pekan kamu ngapain?" },
+      "model": "周末我在家休息，或者跟朋友去公园玩儿。" }
+  ]
+}
