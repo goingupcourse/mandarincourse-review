@@ -199,10 +199,16 @@ a.prow .pnum{font-size:13px;color:var(--muted);text-align:right}
    ===================================================================== */
 const SUPABASE_URL = "https://gvodqdbqjxqrfmhygsdw.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_qw2wY3WB5UYzX7-xx8Mgzg_05TWARz-"; // publishable key: safe in the browser
-/* Students log in with a username. Behind the scenes it becomes
-   <username>@USERNAME_DOMAIN (no email is ever sent to it). */
-const USERNAME_DOMAIN = "siswa.goingup.id";
-const toEmail = (u) => (u.includes("@") ? u.trim() : `${u.trim().toLowerCase()}@${USERNAME_DOMAIN}`);
+/* Students log in with a username. Behind the scenes it becomes a Gmail
+   "plus" address on the course inbox: goingupcourse+<username>@gmail.com
+   (a real, valid address — any Supabase email for it lands in your Gmail). */
+const STUDENT_EMAIL_BASE = "goingupcourse@gmail.com";
+const toEmail = (u) => {
+  u = u.trim().toLowerCase();
+  if (u.includes("@")) return u;
+  const [local, domain] = STUDENT_EMAIL_BASE.split("@");
+  return `${local}+${u}@${domain}`;
+};
 const USERNAME_RE = /^[a-z0-9_.]{3,30}$/;
 
 /* =====================================================================
