@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Going Up! 汉语教程</title>
+<title>Going Up! Mandarin Course Bali</title>
 <style>
 :root{
   --red:#c8102e; --red-d:#9e0c24; --yellow:#ffc72c; --ink:#1d1d1f; --muted:#6b6b70;
@@ -210,6 +210,11 @@ const toEmail = (u) => {
   return `${local}+${u}@${domain}`;
 };
 const USERNAME_RE = /^[a-z0-9_.]{3,30}$/;
+/* Which books this copy of the site shows. [] = all books.
+   For 3 separate sites, upload 3 copies with e.g. ["1a","1b"], ["2a","2b"], ["3a","3b"].
+   All copies share the same database, accounts and progress. */
+const ONLY_BOOKS = ["1a", "1b"];
+const SITE_SUBTITLE = "Mandarin Course Bali";
 
 /* =====================================================================
    Helpers
@@ -465,7 +470,8 @@ async function loadIndex() {
     fetchAll(() => sb.from("latest_attempts").select("lesson_id,qid,correct").eq("user_id", uid)).catch((e) => { console.error(e); return []; }),
   ]);
   if (b.error || l.error) { toast("Gagal memuat daftar pelajaran."); console.error(b.error || l.error); }
-  S.books = b.data || []; S.lessons = l.data || [];
+  const keep = (id) => !ONLY_BOOKS.length || ONLY_BOOKS.includes(id);
+  S.books = (b.data || []).filter((x) => keep(x.id)); S.lessons = (l.data || []).filter((x) => keep(x.book));
   S.progress = {};
   a.forEach((x) => { (S.progress[x.lesson_id] ||= {})[x.qid] = x.correct; });
 }
@@ -561,7 +567,7 @@ function renderShell(mainHtml) {
   $("#app").innerHTML = `
     <header class="top">
       <button class="menu-btn" data-act="menu" aria-label="Menu">☰</button>
-      <div class="brand"><b>Going Up!</b><span style="font-family:var(--zh)">汉语教程</span></div>
+      <div class="brand"><b>Going Up!</b><span>${esc(SITE_SUBTITLE)}</span></div>
       <button data-act="py" aria-pressed="${S.showPy}">拼音</button>
       <button data-act="tr" aria-pressed="${S.showTr}">Arti</button>
       <button data-act="logout" title="Keluar">⎋</button>
@@ -917,7 +923,7 @@ function currentRendered() { return S.view === "editor" ? S.preview : S.lesson; 
 function renderLogin() {
   S.view = "login";
   $("#app").innerHTML = `<form class="auth" id="login">
-    <h1>Going Up! <span style="font-family:var(--zh)">汉语教程</span></h1>
+    <h1>Going Up! Mandarin Course Bali</h1>
     <p style="color:var(--muted);margin:0 0 8px">Masuk dengan username dan password dari gurumu.</p>
     <label class="field">Username<input name="username" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
     <label class="field">Password<input name="password" type="password" required autocomplete="current-password"></label>
