@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Going Up! 汉语教程</title>
+<style>
+:root{
+  --red:#c8102e; --red-d:#9e0c24; --yellow:#ffc72c; --ink:#1d1d1f; --muted:#6b6b70;
+  --line:#e7e2dc; --bg:#faf8f5; --card:#fff; --ok:#1f8a4c; --bad:#c8102e; --auto:#b26b00;
+  --zh:"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,var(--zh)}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit}
+a{color:var(--red)}
+.hidden{display:none!important}
+
+/* ---------- layout ---------- */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;
+  padding:10px 16px;background:var(--red);color:#fff}
+.top .brand{white-space:nowrap;font-weight:700;letter-spacing:.2px;margin-right:auto;display:flex;align-items:center;gap:8px}
+.top .brand b{background:var(--yellow);color:var(--red);border-radius:6px;padding:1px 7px}
+.top button{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:999px;padding:6px 12px;font-size:14px}
+.top button[aria-pressed="true"]{background:var(--yellow);color:var(--ink)}
+.menu-btn{display:none}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:calc(100vh - 52px)}
+.side{border-right:1px solid var(--line);background:#fff;padding:12px 0;overflow:auto;max-height:calc(100vh - 52px);position:sticky;top:52px}
+.side h4{margin:14px 16px 6px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.side a.l{display:flex;gap:8px;padding:7px 16px;text-decoration:none;color:var(--ink);font-size:15px;border-left:3px solid transparent}
+.side a.l:hover{background:var(--bg)}
+.side a.l.on{border-left-color:var(--red);background:#fff4f5;font-weight:600}
+.side .no{color:var(--muted);min-width:2.2em;font-variant-numeric:tabular-nums}
+.side .zh{font-family:var(--zh)}
+.badge{font-size:11px;border-radius:999px;padding:1px 7px;background:#eee;color:var(--muted);margin-left:auto;align-self:center}
+.badge.draft{background:#fff3cd;color:#7a5b00}
+.side .staff{border-top:1px solid var(--line);margin-top:12px;padding-top:6px}
+main{padding:20px 16px 80px;max-width:860px;width:100%;margin:0 auto;min-width:0}
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .top{gap:6px;padding:10px 12px}
+  .top button{padding:6px 10px}
+  .top .brand{white-space:nowrap;gap:6px}
+  .top .brand span{display:none}
+  .menu-btn{display:inline-block}
+  .side{position:fixed;inset:52px 0 0 0;z-index:15;max-height:none;transform:translateX(-100%);transition:transform .2s;width:min(320px,86vw)}
+  .side.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.25)}
+}
+
+/* ---------- lesson ---------- */
+.lhead{margin:4px 0 14px}
+.lhead .kicker{color:var(--muted);font-size:14px}
+.lhead h1{font-family:var(--zh);font-size:30px;margin:2px 0 0;line-height:1.3}
+.lhead .sub{color:var(--muted)}
+.objectives{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 14px;font-size:15px}
+.objectives ul{margin:4px 0 0;padding-left:20px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;position:sticky;top:52px;background:var(--bg);z-index:5;padding-top:6px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;white-space:nowrap}
+.tabs button .zh{font-family:var(--zh);font-weight:600;margin-right:4px}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:20px;font-family:var(--zh)}
+.card h3{margin:0 0 8px;font-size:17px}
+.scene{color:var(--muted);font-size:14px;margin-bottom:8px}
+.track{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin-left:6px;font-family:ui-monospace,monospace}
+
+/* chinese line with ruby */
+.zhline{font-family:var(--zh);font-size:22px;line-height:2.3}
+.zhline.sm{font-size:19px;line-height:2.1}
+ruby{ruby-position:over;margin:0 1px}
+rt{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:.5em;color:var(--red-d);letter-spacing:.02em}
+.auto rt{color:var(--auto)}
+body.hide-py rt{visibility:hidden}
+body.hide-tr .tr{display:none}
+.tr{color:var(--muted);font-size:15px;margin-top:-2px}
+.dot{font-style:normal;-webkit-text-emphasis:dot;-webkit-text-emphasis-position:under;text-emphasis:dot;text-emphasis-position:under left}
+.line{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:start;padding:6px 0;border-bottom:1px dashed var(--line)}
+.line:last-child{border-bottom:0}
+.spk{font-family:var(--zh);font-weight:700;color:var(--red);padding-top:12px;min-width:2em}
+.para{text-indent:0;margin:0 0 10px}
+.say{border:0;background:#fff4f5;color:var(--red);width:34px;height:34px;border-radius:50%;flex:none;display:inline-grid;place-items:center;font-size:15px;margin-top:8px}
+.say:hover{background:var(--red);color:#fff}
+.note-auto{font-size:12px;color:var(--auto)}
+
+/* vocab */
+.vgrid{display:grid;gap:10px}
+.vitem{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.vnum{color:var(--muted);font-size:13px;min-width:1.6em}
+.vhz{font-family:var(--zh);font-size:26px;line-height:1.2}
+.vpy{color:var(--red-d)}
+body.hide-py .vpy{visibility:hidden}
+.vpos{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 5px;margin-left:6px}
+.vmean{font-size:15px}
+.vsub{grid-column:2/4;font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:8px;margin-top:4px}
+.vsub .vhz{font-size:18px}
+.vex{grid-column:1/4;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+details.vexd summary{cursor:pointer;color:var(--muted);font-size:14px;grid-column:1/4}
+
+/* grammar */
+.kind{font-size:12px;border-radius:999px;padding:1px 8px;background:#f1f1f1;color:var(--muted);margin-left:6px;font-weight:500;vertical-align:middle}
+.kind.usage{background:#fff3cd;color:#7a5b00}
+.kind.phonetics{background:#e6f1ff;color:#1d4f91}
+.expl{font-size:15.5px}
+.expl p{margin:6px 0}
+.pattern{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:#fffaf0;border:1px solid #f3dfb0;border-radius:10px;padding:10px 12px;margin:10px 0}
+.seg{font-family:var(--zh);font-size:18px;border-radius:8px;padding:2px 9px}
+.seg.slot{background:#fff;border:1px dashed #c9a24a;color:#7a5b00;font-family:inherit;font-size:15px}
+.seg.fixed{background:var(--red);color:#fff;font-weight:600}
+.seg.fixed small{display:block;font-size:11px;font-weight:400;opacity:.85;text-align:center;line-height:1}
+body.hide-py .seg.fixed small{visibility:hidden}
+.plus{color:var(--muted)}
+.compare{border:1px solid var(--line);border-radius:10px;margin-top:10px;overflow:hidden}
+.compare h4{margin:0;padding:8px 12px;background:#f6f4f1;font-size:15px}
+.compare table{width:100%;border-collapse:collapse;font-size:14.5px}
+.compare td,.compare th{border-top:1px solid var(--line);padding:7px 10px;vertical-align:top;text-align:left}
+.mistake{font-size:14.5px;margin-top:6px}
+.mistake .w{color:var(--bad);text-decoration:line-through;font-family:var(--zh)}
+.mistake .r{color:var(--ok);font-family:var(--zh)}
+.exlist{margin:8px 0 0;padding:0;list-style:none}
+.exlist li{display:flex;gap:8px;align-items:flex-start;padding:4px 0}
+.exlist .num{color:var(--muted);font-size:13px;padding-top:12px;min-width:1.6em}
+
+/* exercises */
+.q{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.q .qp{font-weight:600;margin-bottom:8px}
+.q .qn{color:var(--muted);font-weight:400;margin-right:6px}
+.opts{display:grid;gap:8px}
+.opt,.chip{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px;text-align:left}
+.chip{border-radius:999px;padding:6px 14px;font-family:var(--zh);font-size:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.opt:hover,.chip:hover{border-color:var(--ink)}
+.opt.sel,.chip.sel{border-color:var(--ink);background:#f3f3f3}
+.opt.ok,.chip.ok,.slot.ok{border-color:var(--ok);background:#e8f6ee;color:var(--ok)}
+.opt.bad,.chip.bad,.slot.bad{border-color:var(--bad);background:#fdecef;color:var(--bad)}
+.chip[disabled]{opacity:.35;cursor:default}
+.fb{font-family:var(--zh);font-size:21px;line-height:2.2}
+.fb .slot{display:inline-block;min-width:3.2em;border-bottom:2px solid var(--ink);text-align:center;margin:0 3px;cursor:pointer;border-radius:4px 4px 0 0;padding:0 4px}
+.fb input.ok{border-color:var(--ok);color:var(--ok)} .fb input.bad{border-color:var(--bad);color:var(--bad)}
+.btn[disabled]{opacity:.45;cursor:default}
+.fb input{width:4.5em;font-size:18px;text-align:center;border:0;border-bottom:2px solid var(--ink);background:transparent;font-family:var(--zh)}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.match .col{display:grid;gap:8px;align-content:start}
+.answer-row{min-height:46px;border:1px dashed var(--line);border-radius:10px;padding:6px;display:flex;flex-wrap:wrap;gap:6px}
+.qact{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:8px 16px;background:var(--ink);color:#fff}
+.btn.red{background:var(--red)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.res{font-weight:600}
+.res.ok{color:var(--ok)} .res.bad{color:var(--bad)}
+.explain{font-size:14.5px;color:var(--muted);margin-top:6px}
+textarea.ans{width:100%;min-height:80px;border:1px solid var(--line);border-radius:10px;padding:8px;font-family:var(--zh);font-size:17px}
+input.fix{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;font-family:var(--zh);font-size:18px}
+.score{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:15px}
+.bar{flex:1;height:8px;background:#eee;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+
+/* editor + auth */
+.auth{max-width:380px;margin:12vh auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px}
+.auth h1{margin:0 0 4px;font-size:22px}
+.field{display:grid;gap:4px;margin:10px 0}
+.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fff}
+.err{color:var(--bad);font-size:14px;min-height:1.2em}
+.editor textarea{width:100%;min-height:55vh;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;tab-size:2}
+.editor .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.issues{font-size:14px;margin:8px 0;padding:0;list-style:none}
+.issues li{padding:4px 8px;border-radius:6px;margin-bottom:3px}
+.issues .e{background:#fdecef;color:var(--bad)}
+.issues .w{background:#fff3cd;color:#7a5b00}
+.issues .ok{background:#e8f6ee;color:var(--ok)}
+.preview{border:2px dashed var(--yellow);border-radius:14px;padding:12px;margin-top:14px}
+table.people{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+table.people td,table.people th{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:10px;font-size:14px;z-index:50;max-width:90vw}
+.empty{color:var(--muted);text-align:center;padding:40px 10px}
+</style>
+</head>
+<body>
+<div id="app"><div class="empty">Memuat…</div></div>
+<audio id="player" preload="none"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Optional: auto-pinyin for lines where you didn't write `py` yourself. -->
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3/dist/index.js" defer></script>
+<script>
+"use strict";
+/* =====================================================================
+   CONFIG — paste from Supabase → Project Settings → API
+   ===================================================================== */
+const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+
+/* =====================================================================
+   Helpers
+   ===================================================================== */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("gu." + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("gu." + k, JSON.stringify(v)); } catch {} },
+};
+function toast(msg, ms = 2600) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), ms);
+}
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const HAN = /\p{Script=Han}/u;
+const PUNCT = /^[\p{P}\p{S}…—]+$/u;
+const norm = (s) => String(s ?? "").replace(/[\s\p{P}]/gu, "").toLowerCase();
+const plain = (zh) => String(zh ?? "").replace(/\[\[|\]\]/g, "").replace(/\s+/g, "");
+
+/* Mini markdown: **bold**, *italic*, ~~strike~~, [[dot-emphasis]], blank line = paragraph */
+function md(s) {
+  return String(s ?? "").split(/\n{2,}/).map((p) =>
+    "<p>" + esc(p)
+      .replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")
+      .replace(/~~(.+?)~~/g, "<s>$1</s>")
+      .replace(/\*(.+?)\*/g, "<i>$1</i>")
+      .replace(/\[\[(.+?)\]\]/g, '<em class="dot">$1</em>')
+      .replace(/\n/g, "<br>") + "</p>").join("");
+}
+
+/* =====================================================================
+   Pinyin rendering
+   zh is word-segmented with spaces; py has the same number of chunks.
+   [[...]] marks dot emphasis (着重号), may span chunks.
+   If py is missing or misaligned → auto pinyin (shown in amber).
+   ===================================================================== */
+function ruby(zh, py) {
+  const zc = String(zh ?? "").trim().split(/\s+/).filter(Boolean);
+  let pc = py ? String(py).trim().split(/\s+/) : null;
+  if (pc && pc.length !== zc.length) pc = null;
+  let emph = false, out = "";
+  zc.forEach((raw, i) => {
+    let w = raw, open = false, close = false;
+    if (w.startsWith("[[")) { w = w.slice(2); open = true; }
+    if (w.endsWith("]]")) { w = w.slice(0, -2); close = true; }
+    if (open) emph = true;
+    let html;
+    if (PUNCT.test(w)) html = esc(w);
+    else if (pc) html = `<ruby>${esc(w)}<rt>${esc(pc[i])}</rt></ruby>`;
+    else html = autoRuby(w);
+    out += emph ? `<em class="dot">${html}</em>` : html;
+    if (close) emph = false;
+  });
+  return out;
+}
+function autoRuby(text) {
+  const P = window.pinyinPro;
+  if (!P || !HAN.test(text)) return esc(text);
+  try {
+    const chars = [...text];
+    const arr = P.pinyin(text, { type: "array" });
+    if (arr.length !== chars.length) return esc(text);
+    return `<span class="auto">` + chars.map((c, i) => HAN.test(c) ? `<ruby>${esc(c)}<rt>${esc(arr[i])}</rt></ruby>` : esc(c)).join("") + `</span>`;
+  } catch { return esc(text); }
+}
+
+/* =====================================================================
+   Audio: private Supabase file → signed URL; otherwise browser TTS
+   ===================================================================== */
+const player = $("#player");
+const urlCache = new Map();
+async function play(path, text) {
+  if (path) {
+    try {
+      let hit = urlCache.get(path);
+      if (!hit || hit.exp < Date.now()) {
+        const { data, error } = await sb.storage.from("audio").createSignedUrl(path, 3600);
+        if (error) throw error;
+        hit = { url: data.signedUrl, exp: Date.now() + 50 * 60 * 1000 };
+        urlCache.set(path, hit);
+      }
+      speechSynthesis?.cancel?.();
+      player.src = hit.url; await player.play(); return;
+    } catch (e) { console.warn("audio fallback to TTS:", e); }
+  }
+  tts(text);
+}
+function tts(text) {
+  if (!("speechSynthesis" in window) || !text) { toast("Audio belum tersedia di perangkat ini."); return; }
+  player.pause(); speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "zh-CN"; u.rate = 0.85;
+  const v = speechSynthesis.getVoices().find((v) => /^zh[-_](CN|Hans)/i.test(v.lang));
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+const sayBtn = (text, audio) => `<button class="say" title="Dengarkan" aria-label="Dengarkan" data-say="${esc(plain(text))}" data-audio="${esc(audio || "")}">▶</button>`;
+
+/* =====================================================================
+   Content validation (runs in the Editor before saving)
+   ===================================================================== */
+const POS = ["n","pron","v","adj","adv","num","m","prep","conj","part","aux","int","pn","phrase","idiom","onom"];
+const QTYPES = ["multiple_choice","fill_blank","pinyin_match","tone_select","reorder","open_answer","fix_error"];
+function validateLesson(L) {
+  const E = [], W = [];
+  const err = (m) => E.push(m), warn = (m) => W.push(m);
+  if (!L || typeof L !== "object") return { E: ["Bukan objek JSON."], W };
+  if (L.schemaVersion !== 2) err('schemaVersion harus 2');
+  if (!/^[1-3][ab]-\d+$/.test(L.id || "")) err('id harus seperti "1b-16"');
+  if (!/^[1-3][ab]$/.test(L.book || "")) err('book harus 1a/1b/2a/2b/3a/3b');
+  if (L.id && L.book && !L.id.startsWith(L.book + "-")) err("id dan book tidak cocok");
+  if (!Number.isInteger(L.lesson) || L.lesson < 1) err("lesson harus angka ≥ 1");
+  if (L.id && Number.isInteger(L.lesson) && L.id.split("-")[1] !== String(L.lesson)) err("Nomor di id ≠ lesson");
+  if (!L.title?.zh) err("title.zh wajib");
+  if (L.status && !["draft","published"].includes(L.status)) err("status: draft/published");
+
+  const ids = new Set();
+  const addId = (id, where) => {
+    if (!id || !/^[a-z0-9-]+$/.test(id)) err(`${where}: id "${id ?? ""}" tidak valid (huruf kecil, angka, -)`);
+    else if (ids.has(id)) err(`id dobel: ${id}`); else ids.add(id);
+  };
+  const sentence = (s, where, { needId = true } = {}) => {
+    if (!s || typeof s.zh !== "string" || !s.zh.trim()) { err(`${where}: zh kosong`); return; }
+    if (needId && !s.id) warn(`${where}: terjemahan (id) kosong`);
+    if (s.py) {
+      const a = s.zh.trim().split(/\s+/).length, b = s.py.trim().split(/\s+/).length;
+      if (a !== b) err(`${where}: zh punya ${a} potongan, py punya ${b} → "${s.zh}"`);
+    } else if (HAN.test(s.zh)) warn(`${where}: py kosong → pinyin otomatis (cek ulang)`);
+  };
+  const arr = (k) => { if (L[k] === undefined) return []; if (!Array.isArray(L[k])) { err(`${k} harus array`); return []; } return L[k]; };
+
+  arr("texts").forEach((t, i) => {
+    const w = `texts[${i}]`; addId(t.tid, w);
+    if (!["dialogue","narrative"].includes(t.kind)) err(`${w}.kind: dialogue/narrative`);
+    if (!t.title?.zh) warn(`${w}: title.zh kosong`);
+    if (!Array.isArray(t.lines) || !t.lines.length) err(`${w}.lines kosong`);
+    (t.lines || []).forEach((l, j) => sentence(l, `${w}.lines[${j}]`));
+  });
+  arr("vocabulary").forEach((v, i) => {
+    const w = `vocabulary[${i}] ${v.hanzi ?? ""}`; addId(v.vid, w);
+    if (!v.hanzi) err(`${w}: hanzi kosong`);
+    if (!v.pinyin) err(`${w}: pinyin kosong`);
+    if (!v.meaning) err(`${w}: meaning kosong`);
+    (v.pos || []).forEach((p) => { if (!POS.includes(p)) err(`${w}: pos "${p}" tidak dikenal`); });
+    (v.examples || []).forEach((s, j) => sentence(s, `${w}.examples[${j}]`));
+    (v.sub || []).forEach((s, j) => { if (!s.hanzi || !s.pinyin) err(`${w}.sub[${j}]: hanzi/pinyin kosong`); });
+  });
+  arr("notes").forEach((n, i) => {
+    const w = `notes[${i}]`; addId(n.nid, w);
+    if (!n.head?.zh) err(`${w}: head.zh kosong`);
+    if (!n.explanation) warn(`${w}: explanation kosong`);
+    (n.examples || []).forEach((s, j) => sentence(s, `${w}.examples[${j}]`));
+  });
+  arr("grammar").forEach((g, i) => {
+    const w = `grammar[${i}]`; addId(g.gid, w);
+    if (!["grammar","usage","phonetics"].includes(g.kind || "grammar")) err(`${w}.kind: grammar/usage/phonetics`);
+    if (!g.title) err(`${w}: title kosong`);
+    (g.patterns || []).forEach((p, j) => { if (!Array.isArray(p)) err(`${w}.patterns[${j}] harus array`); });
+    (g.examples || []).forEach((s, j) => sentence(s, `${w}.examples[${j}]`));
+    if (g.compare) (g.compare.examples || []).forEach((s, j) => sentence(s, `${w}.compare.examples[${j}]`));
+  });
+  const ex = arr("exercises");
+  ex.forEach((q, i) => {
+    const w = `exercises[${i}] (${q.type})`; addId(q.qid, w);
+    if (!QTYPES.includes(q.type)) { err(`${w}: type tidak dikenal`); return; }
+    if (!q.prompt) warn(`${w}: prompt kosong`);
+    switch (q.type) {
+      case "multiple_choice": case "tone_select":
+        if (!Array.isArray(q.options) || q.options.length < 2) err(`${w}: options minimal 2`);
+        else if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer >= q.options.length) err(`${w}: answer index di luar range`);
+        if (q.type === "tone_select" && !q.hanzi) err(`${w}: hanzi kosong`);
+        break;
+      case "fill_blank": {
+        const blanks = (q.zh || "").split("___").length - 1;
+        if (!blanks) err(`${w}: tidak ada ___ di zh`);
+        if (!Array.isArray(q.answers) || q.answers.length !== blanks) err(`${w}: ${blanks} blank tapi ${q.answers?.length ?? 0} daftar jawaban`);
+        if (q.wordBank) q.answers?.forEach((a, j) => { if (!a.some((x) => q.wordBank.includes(x))) err(`${w}: jawaban blank ${j + 1} tidak ada di wordBank`); });
+        break; }
+      case "pinyin_match":
+        if (!Array.isArray(q.pairs) || q.pairs.length < 2) err(`${w}: pairs minimal 2`);
+        else if (new Set(q.pairs.map((p) => p.right)).size !== q.pairs.length) err(`${w}: ada "right" yang sama → ambigu`);
+        break;
+      case "reorder":
+        if (!Array.isArray(q.tokens) || q.tokens.length < 2) err(`${w}: tokens minimal 2 (urutan yang benar)`);
+        break;
+      case "open_answer":
+        if (!q.question?.zh) err(`${w}: question.zh kosong`);
+        break;
+      case "fix_error":
+        if (!q.wrong) err(`${w}: wrong kosong`);
+        if (!Array.isArray(q.right) || !q.right.length) err(`${w}: right harus array berisi jawaban benar`);
+        break;
+    }
+  });
+  ex.forEach((q, i) => { if (q.ref && !ids.has(q.ref)) err(`exercises[${i}]: ref "${q.ref}" tidak ditemukan`); });
+  return { E, W };
+}
+
+/* =====================================================================
+   State
+   ===================================================================== */
+const S = {
+  session: null, profile: null, books: [], lessons: [],
+  lesson: null, tab: "texts", attempts: {}, view: "home",
+  showPy: store.get("py", true), showTr: store.get("tr", true),
+};
+let sb = null;
+
+/* =====================================================================
+   Boot + routing  (#/1b-16/vocabulary  ·  #/editor/1b-16  ·  #/students)
+   ===================================================================== */
+async function boot() {
+  if (SUPABASE_URL.includes("YOUR-PROJECT") || !window.supabase) {
+    $("#app").innerHTML = `<div class="auth"><h1>Setup belum selesai</h1><p>Isi <code>SUPABASE_URL</code> dan <code>SUPABASE_ANON_KEY</code> di bagian atas script <code>index.html</code>.</p></div>`;
+    return;
+  }
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  applyToggles();
+  const { data } = await sb.auth.getSession();
+  S.session = data.session;
+  sb.auth.onAuthStateChange((_e, session) => {
+    const changed = (session?.user?.id) !== (S.session?.user?.id);
+    S.session = session; if (changed) start();
+  });
+  start();
+}
+async function start() {
+  if (!S.session) return renderLogin();
+  const { data: prof } = await sb.from("profiles").select("*").eq("id", S.session.user.id).maybeSingle();
+  S.profile = prof;
+  if (!prof?.active) return renderInactive();
+  await loadIndex();
+  route();
+}
+window.addEventListener("hashchange", () => S.profile?.active && route());
+
+async function loadIndex() {
+  const [b, l] = await Promise.all([
+    sb.from("books").select("*").order("sort"),
+    sb.from("lessons").select("id,book,lesson_no,title_zh,title_py,title_id,status").order("lesson_no"),
+  ]);
+  if (b.error || l.error) { toast("Gagal memuat daftar pelajaran."); console.error(b.error || l.error); }
+  S.books = b.data || []; S.lessons = l.data || [];
+}
+const isStaff = () => ["teacher", "admin"].includes(S.profile?.role);
+
+async function route() {
+  const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  if (parts[0] === "editor" && isStaff()) return renderEditor(parts[1]);
+  if (parts[0] === "students" && isStaff()) return renderStudents();
+  if (parts[0] && /^[1-3][ab]-\d+$/.test(parts[0])) {
+    if (S.lesson?.id !== parts[0]) await loadLesson(parts[0]);
+    if (!S.lesson) return renderShell(`<div class="empty">Pelajaran tidak ditemukan atau belum dipublikasikan.</div>`);
+    S.tab = parts[1] || firstTab(S.lesson);
+    return renderLesson();
+  }
+  S.view = "home";
+  renderShell(`<div class="empty"><p style="font-size:40px;margin:0">加油！</p><p>Pilih pelajaran di menu.</p></div>`);
+}
+async function loadLesson(id) {
+  const { data, error } = await sb.from("lessons").select("*").eq("id", id).maybeSingle();
+  if (error) { console.error(error); toast("Gagal memuat pelajaran."); }
+  S.lesson = data ? fromRow(data) : null;
+  S.attempts = {};
+  if (data) {
+    const { data: at } = await sb.from("attempts").select("qid,correct,created_at")
+      .eq("lesson_id", id).eq("user_id", S.session.user.id).order("created_at", { ascending: false });
+    (at || []).forEach((a) => { if (!(a.qid in S.attempts)) S.attempts[a.qid] = a.correct; });
+  }
+}
+/* DB row ⇄ the single JSON document you author */
+const fromRow = (r) => ({ ...r.content, id: r.id, book: r.book, lesson: r.lesson_no,
+  title: { zh: r.title_zh, py: r.title_py || "", id: r.title_id || "" }, status: r.status });
+function toRow(L) {
+  const { id, book, lesson, title, status, ...content } = L;
+  return { id, book, lesson_no: lesson, title_zh: title.zh, title_py: title.py || null,
+    title_id: title.id || null, status: status || "draft", content };
+}
+
+/* =====================================================================
+   Shell: top bar + sidebar
+   ===================================================================== */
+function renderShell(mainHtml) {
+  const activeId = S.lesson?.id;
+  const side = S.books.map((b) => {
+    const ls = S.lessons.filter((l) => l.book === b.id);
+    if (!ls.length) return "";
+    return `<h4>${esc(b.title_id)} · <span class="zh">${esc(b.title_zh)}</span></h4>` + ls.map((l) =>
+      `<a class="l ${l.id === activeId && S.view === "lesson" ? "on" : ""}" href="#/${l.id}">
+        <span class="no">${l.lesson_no}</span><span class="zh">${esc(plain(l.title_zh))}</span>
+        ${l.status === "draft" ? `<span class="badge draft">draft</span>` : ""}</a>`).join("");
+  }).join("") || `<div class="empty" style="padding:20px">Belum ada pelajaran.</div>`;
+  const staff = isStaff() ? `<div class="staff"><h4>Guru</h4>
+      <a class="l" href="#/editor${activeId ? "/" + activeId : ""}">✎ Editor pelajaran</a>
+      <a class="l" href="#/students">👥 Siswa</a></div>` : "";
+  $("#app").innerHTML = `
+    <header class="top">
+      <button class="menu-btn" data-act="menu" aria-label="Menu">☰</button>
+      <div class="brand"><b>Going Up!</b><span style="font-family:var(--zh)">汉语教程</span></div>
+      <button data-act="py" aria-pressed="${S.showPy}">拼音</button>
+      <button data-act="tr" aria-pressed="${S.showTr}">Arti</button>
+      <button data-act="logout" title="Keluar">⎋</button>
+    </header>
+    <div class="shell">
+      <nav class="side" id="side">${side}${staff}</nav>
+      <main id="main">${mainHtml}</main>
+    </div>`;
+}
+function applyToggles() {
+  document.body.classList.toggle("hide-py", !S.showPy);
+  document.body.classList.toggle("hide-tr", !S.showTr);
+  document.querySelectorAll('[data-act="py"]').forEach((b) => b.setAttribute("aria-pressed", S.showPy));
+  document.querySelectorAll('[data-act="tr"]').forEach((b) => b.setAttribute("aria-pressed", S.showTr));
+}
+
+/* =====================================================================
+   Lesson view
+   ===================================================================== */
+function tabsFor(L) {
+  const g = L.grammar || [];
+  const gLabel = g.length && g.every((x) => x.kind === "usage") ? ["词语用法", "Penggunaan Kata"] : ["语法", "Tata Bahasa"];
+  return [
+    ["texts", "课文", "Teks", (L.texts || []).length],
+    ["vocabulary", "生词", "Kosakata", (L.vocabulary || []).length],
+    ["notes", "注释", "Catatan", (L.notes || []).length],
+    ["grammar", gLabel[0], gLabel[1], g.length],
+    ["exercises", "练习", "Latihan", (L.exercises || []).length],
+  ].filter((t) => t[3]);
+}
+const firstTab = (L) => tabsFor(L)[0]?.[0] || "texts";
+
+function renderLesson(L = S.lesson, { preview = false } = {}) {
+  if (!preview) S.view = "lesson";
+  const tabs = tabsFor(L);
+  const tab = tabs.some((t) => t[0] === S.tab) ? S.tab : tabs[0]?.[0];
+  const body = { texts: viewTexts, vocabulary: viewVocab, notes: viewNotes, grammar: viewGrammar, exercises: viewExercises }[tab]?.(L) || `<div class="empty">Konten kosong.</div>`;
+  const html = `
+    <div class="lhead">
+      <div class="kicker">${esc((S.books.find((b) => b.id === L.book) || {}).title_id || L.book?.toUpperCase())} · 第${L.lesson}课
+        ${L.status === "draft" ? `<span class="badge draft">draft</span>` : ""}</div>
+      <h1 class="zhline" style="font-size:30px;line-height:1.9">${ruby(L.title?.zh, L.title?.py)}</h1>
+      <div class="sub tr">${esc(L.title?.id)}</div>
+    </div>
+    ${(L.objectives || []).length ? `<div class="objectives"><b>Target belajar</b><ul>${L.objectives.map((o) => `<li>${esc(o)}</li>`).join("")}</ul></div>` : ""}
+    <div class="tabs" role="tablist">${tabs.map((t) => `<button role="tab" class="${t[0] === tab ? "on" : ""}" data-tab="${t[0]}"><span class="zh">${t[1]}</span>${t[2]}</button>`).join("")}</div>
+    <section id="tabbody">${body}</section>`;
+  if (preview) return html;
+  renderShell(html);
+  wireExercises(L);
+}
+
+function lineHtml(l, { speaker = true, size = "" } = {}) {
+  return `<div class="line">
+    ${speaker && l.speaker ? `<div class="spk">${esc(l.speaker)}</div>` : `<div></div>`}
+    <div><div class="zhline ${size}">${ruby(l.zh, l.py)}</div>${l.id ? `<div class="tr">${esc(l.id)}</div>` : ""}
+      ${l.note ? `<div class="explain">${md(l.note)}</div>` : ""}</div>
+    ${sayBtn(l.zh, l.audio)}
+  </div>`;
+}
+function exampleList(list) {
+  if (!list?.length) return "";
+  return `<ul class="exlist">${list.map((s, i) => `<li><span class="num">(${i + 1})</span>
+    <div style="flex:1"><div class="zhline sm">${ruby(s.zh, s.py)}</div>${s.id ? `<div class="tr">${esc(s.id)}</div>` : ""}</div>
+    ${sayBtn(s.zh, s.audio)}</li>`).join("")}</ul>`;
+}
+const hasAuto = (lines) => lines.some((l) => !l.py && HAN.test(l.zh || ""));
+
+function viewTexts(L) {
+  return (L.texts || []).map((t) => {
+    const full = t.lines.map((l) => plain(l.zh)).join("");
+    let lines;
+    if (t.kind === "narrative") {
+      // group into paragraphs by `p`
+      const paras = []; t.lines.forEach((l) => { const k = l.p ?? 0; (paras[k] ||= []).push(l); });
+      lines = paras.filter(Boolean).map((p) => `<div class="para">${p.map((l) => lineHtml(l, { speaker: false })).join("")}</div>`).join("");
+    } else lines = t.lines.map((l) => lineHtml(l)).join("");
+    return `<div class="card">
+      <div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+        <h2>${ruby(t.title?.zh || "", t.title?.py)}${t.track ? `<span class="track">${esc(t.track)}</span>` : ""}</h2>
+        ${sayBtn(full, t.audio)}
+      </div>
+      ${t.title?.id ? `<div class="tr">${esc(t.title.id)}</div>` : ""}
+      ${t.scene ? `<div class="scene">${esc(t.scene)}</div>` : ""}
+      ${hasAuto(t.lines) ? `<div class="note-auto">Pinyin warna oranye = otomatis, belum dicek guru.</div>` : ""}
+      ${lines}
+    </div>`;
+  }).join("");
+}
+
+const POS_ID = { n:"n", pron:"pron", v:"v", adj:"adj", adv:"adv", num:"num", m:"klf", prep:"prep", conj:"konj", part:"part", aux:"aux", int:"int", pn:"nama", phrase:"frasa", idiom:"idiom", onom:"onom" };
+function viewVocab(L) {
+  const all = L.vocabulary || [];
+  const main = all.filter((v) => !v.properNoun), proper = all.filter((v) => v.properNoun);
+  const item = (v, i) => `<div class="vitem">
+      <span class="vnum">${i + 1}</span>
+      <div>
+        <div><span class="vhz">${esc(v.hanzi)}</span> <span class="vpy">${esc(v.pinyin)}</span>
+          ${(v.pos || []).map((p) => `<span class="vpos">${esc(POS_ID[p] || p)}</span>`).join("")}</div>
+        <div class="vmean tr">${esc(v.meaning)}</div>
+      </div>
+      ${sayBtn(v.hanzi, v.audio)}
+      ${(v.sub || []).map((s) => `<div class="vsub"><span class="vhz">${esc(s.hanzi)}</span> <span class="vpy">${esc(s.pinyin)}</span>
+          ${(s.pos || []).map((p) => `<span class="vpos">${esc(POS_ID[p] || p)}</span>`).join("")} <span class="tr">${esc(s.meaning || "")}</span></div>`).join("")}
+      ${v.examples?.length ? `<details class="vexd vex"><summary>Contoh kalimat (${v.examples.length})</summary>${exampleList(v.examples)}</details>` : ""}
+    </div>`;
+  return `<div class="vgrid">${main.map(item).join("")}</div>
+    ${proper.length ? `<h3 style="margin:18px 0 8px">专名 · Nama diri</h3><div class="vgrid">${proper.map(item).join("")}</div>` : ""}`;
+}
+
+function viewNotes(L) {
+  return (L.notes || []).map((n, i) => `<div class="card">
+      <div style="display:flex;gap:8px;justify-content:space-between;align-items:flex-start">
+        <h3><span class="qn">${i + 1}.</span> <span class="zhline sm">${ruby(n.head.zh, n.head.py)}</span></h3>
+        ${sayBtn(n.head.zh)}
+      </div>
+      ${n.head.id ? `<div class="tr">${esc(n.head.id)}</div>` : ""}
+      <div class="expl">${md(n.explanation)}</div>
+      ${exampleList(n.examples)}
+    </div>`).join("");
+}
+
+function patternHtml(p) {
+  return `<div class="pattern">${p.map((s, i) => (i ? `<span class="plus">+</span>` : "") +
+    (s.kind === "slot" ? `<span class="seg slot">${esc(s.text)}</span>`
+      : `<span class="seg fixed">${s.pinyin ? `<small>${esc(s.pinyin)}</small>` : ""}${esc(s.text)}</span>`)).join("")}</div>`;
+}
+function viewGrammar(L) {
+  const KIND = { grammar: "语法", usage: "词语用法", phonetics: "语音" };
+  return (L.grammar || []).map((g, i) => {
+    const kind = g.kind || "grammar";
+    const word = g.word ? `<div style="margin:2px 0 8px"><span class="vhz" style="font-family:var(--zh);font-size:22px">${esc(g.word.hanzi)}</span>
+        <span class="vpy">${esc(g.word.pinyin || "")}</span>${(g.word.pos || []).map((p) => `<span class="vpos">${esc(POS_ID[p] || p)}</span>`).join("")}
+        <span class="tr"> ${esc(g.word.meaning || "")}</span></div>` : "";
+    const cmp = g.compare ? `<div class="compare"><h4>${esc(g.compare.title || "Perbandingan")}</h4>
+        ${g.compare.explanation ? `<div class="expl" style="padding:0 12px">${md(g.compare.explanation)}</div>` : ""}
+        ${g.compare.rows?.length ? `<table><thead><tr><th></th><th style="font-family:var(--zh)">${esc(g.compare.a || "A")}</th><th style="font-family:var(--zh)">${esc(g.compare.b || "B")}</th></tr></thead>
+          <tbody>${g.compare.rows.map((r) => `<tr><td>${esc(r.label)}</td><td>${md(r.a)}</td><td>${md(r.b)}</td></tr>`).join("")}</tbody></table>` : ""}
+        <div style="padding:0 12px 8px">${exampleList(g.compare.examples)}</div></div>` : "";
+    return `<div class="card">
+      <h3><span class="qn">${i + 1}.</span> ${esc(g.title)} <span class="kind ${kind}">${KIND[kind]}</span></h3>
+      ${word}
+      <div class="expl">${md(g.explanation)}</div>
+      ${(g.patterns || []).map(patternHtml).join("")}
+      ${exampleList(g.examples)}
+      ${(g.mistakes || []).map((m) => `<div class="mistake">✗ <span class="w">${esc(m.wrong)}</span> → ✓ <span class="r">${esc(m.right)}</span> — ${esc(m.why)}</div>`).join("")}
+      ${cmp}
+    </div>`;
+  }).join("");
+}
+
+/* =====================================================================
+   Exercises
+   ===================================================================== */
+function viewExercises(L) {
+  const graded = L.exercises.filter((q) => q.type !== "open_answer");
+  const done = graded.filter((q) => q.qid in S.attempts).length;
+  const ok = graded.filter((q) => S.attempts[q.qid] === true).length;
+  const pct = graded.length ? Math.round((ok / graded.length) * 100) : 0;
+  return `${graded.length ? `<div class="score"><span class="sc">Skor: <b>${ok}/${graded.length}</b> (${done} dicoba)</span><div class="bar"><i style="width:${pct}%"></i></div>
+      <button class="btn ghost" data-act="reset-quiz" title="Kosongkan jawaban di layar (riwayat tetap tersimpan)">Ulangi</button></div>` : ""}
+    ${L.exercises.map((q, i) => `<div class="q" id="q-${esc(q.qid)}" data-qid="${esc(q.qid)}">
+      <div class="qp"><span class="qn">${i + 1}.</span>${esc(q.prompt || "")}</div>
+      <div class="qbody">${qBody(q)}</div>
+      <div class="qact">${q.type === "open_answer" ? `<button class="btn ghost" data-act="reveal">Lihat contoh jawaban</button>`
+        : q.type === "pinyin_match" ? "" : `<button class="btn" data-act="check">Cek</button>`}
+        <span class="res"></span>
+        ${q.ref ? `<a href="#" data-act="goref" data-ref="${esc(q.ref)}" style="font-size:14px;margin-left:auto">↩ Pelajari lagi</a>` : ""}</div>
+      <div class="explain hidden">${md(q.explanation || "")}</div>
+    </div>`).join("")}`;
+}
+function qBody(q) {
+  switch (q.type) {
+    case "multiple_choice":
+      return `${q.stem ? `<div class="zhline sm" style="margin-bottom:6px">${ruby(q.stem.zh, q.stem.py)} ${sayBtn(q.stem.zh, q.stem.audio)}</div>` : ""}
+        <div class="opts">${q.options.map((o, i) => `<button class="opt" data-opt="${i}"><span style="font-family:var(--zh)">${esc(o)}</span></button>`).join("")}</div>`;
+    case "tone_select":
+      return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span class="vhz" style="font-family:var(--zh);font-size:40px">${esc(q.hanzi)}</span>${sayBtn(q.hanzi, q.audio)}</div>
+        <div class="chips">${q.options.map((o, i) => `<button class="chip" data-opt="${i}" style="font-family:inherit">${esc(o)}</button>`).join("")}</div>`;
+    case "fill_blank": {
+      let n = 0;
+      const parts = esc(q.zh).split("___").map((t, i, a) => t + (i < a.length - 1
+        ? (q.wordBank ? `<span class="slot" data-slot="${n++}">&nbsp;</span>` : `<input data-slot="${n++}" autocomplete="off" autocapitalize="off">`) : ""));
+      return `<div class="fb">${parts.join("")}</div>${q.id ? `<div class="tr">${esc(q.id)}</div>` : ""}
+        ${q.wordBank ? `<div class="chips">${shuffle(q.wordBank).map((w) => `<button class="chip" data-word="${esc(w)}">${esc(w)}</button>`).join("")}</div>` : ""}`;
+    }
+    case "pinyin_match":
+      return `<div class="match"><div class="col">${q.pairs.map((p, i) => `<button class="chip" data-left="${i}">${esc(p.left)}</button>`).join("")}</div>
+        <div class="col">${shuffle(q.pairs.map((p, i) => ({ ...p, i }))).map((p) => `<button class="chip" data-right="${p.i}" style="font-family:inherit;font-size:16px">${esc(p.right)}</button>`).join("")}</div></div>`;
+    case "reorder":
+      return `<div class="answer-row" data-row="ans"></div>${q.id ? `<div class="tr" style="margin-top:6px">${esc(q.id)}</div>` : ""}
+        <div class="chips" data-row="pool">${shuffle(q.tokens.map((t, i) => ({ t, i }))).map((x) => `<button class="chip" data-tok="${x.i}">${esc(x.t)}</button>`).join("")}</div>`;
+    case "open_answer":
+      return `<div class="zhline sm">${ruby(q.question.zh, q.question.py)} ${sayBtn(q.question.zh)}</div>
+        ${q.question.id ? `<div class="tr">${esc(q.question.id)}</div>` : ""}
+        <textarea class="ans" placeholder="Tulis jawabanmu dalam bahasa Mandarin…"></textarea>
+        <div class="explain hidden model"><b>Contoh jawaban:</b> <span style="font-family:var(--zh)">${esc(q.model || "—")}</span></div>`;
+    case "fix_error":
+      return `<div class="fb" style="color:var(--bad)">✗ ${esc(q.wrong)}</div>
+        <input class="fix" placeholder="Tulis kalimat yang benar…" autocomplete="off">`;
+  }
+  return "";
+}
+
+function updateScore(L) {
+  const graded = (L.exercises || []).filter((q) => q.type !== "open_answer");
+  const done = graded.filter((q) => q.qid in S.attempts).length;
+  const ok = graded.filter((q) => S.attempts[q.qid] === true).length;
+  const root = S.view === "editor" ? $("#pv") : $("#tabbody");
+  const sc = root && $(".sc", root), bar = root && $(".bar i", root);
+  if (sc) sc.innerHTML = `Skor: <b>${ok}/${graded.length}</b> (${done} dicoba)`;
+  if (bar) bar.style.width = (graded.length ? Math.round((ok / graded.length) * 100) : 0) + "%";
+}
+async function record(L, q, correct, answer) {
+  S.attempts[q.qid] = correct;
+  updateScore(L);
+  if (!S.session || L !== S.lesson) return; // preview mode: don't save
+  const { error } = await sb.from("attempts").insert({ lesson_id: L.id, qid: q.qid, correct, answer });
+  if (error) console.warn("attempt not saved", error);
+}
+function showResult(box, ok) {
+  const btn = box.querySelector('[data-act="check"]'); if (btn) btn.disabled = true;
+  const r = $(".res", box); r.textContent = ok ? "Benar! 👍" : "Belum tepat";
+  r.className = "res " + (ok ? "ok" : "bad");
+  $(".explain", box)?.classList.remove("hidden");
+}
+
+function wireExercises(L) {
+  (L.exercises || []).forEach((q) => {
+    const box = document.getElementById("q-" + q.qid); if (!box) return;
+    const st = { sel: null, slots: [], left: null, matched: 0, miss: 0, order: [] };
+    box._st = st;
+    if (q.type === "pinyin_match") {
+      box.addEventListener("click", (e) => {
+        const b = e.target.closest("button.chip"); if (!b || b.disabled) return;
+        if (b.dataset.left !== undefined) {
+          box.querySelectorAll("[data-left]").forEach((x) => x.classList.remove("sel"));
+          b.classList.add("sel"); st.left = +b.dataset.left;
+        } else if (b.dataset.right !== undefined && st.left !== null) {
+          const L2 = box.querySelector(`[data-left="${st.left}"]`);
+          if (+b.dataset.right === st.left) {
+            [b, L2].forEach((x) => { x.classList.remove("sel"); x.classList.add("ok"); x.disabled = true; });
+            st.left = null;
+            if (++st.matched === q.pairs.length) { const ok = st.miss === 0; showResult(box, ok); record(L, q, ok, { misses: st.miss }); }
+          } else { st.miss++; b.classList.add("bad"); setTimeout(() => b.classList.remove("bad"), 500); }
+        }
+      });
+    }
+  });
+}
+
+function checkQuestion(L, q, box) {
+  const st = box._st || {};
+  let ok = false, answer = null;
+  switch (q.type) {
+    case "multiple_choice": case "tone_select": {
+      const sel = box.querySelector(".sel[data-opt]");
+      if (!sel) return toast("Pilih jawaban dulu.");
+      answer = +sel.dataset.opt; ok = answer === q.answer;
+      box.querySelectorAll("[data-opt]").forEach((b) => { b.disabled = true;
+        if (+b.dataset.opt === q.answer) b.classList.add("ok"); else if (b === sel) b.classList.add("bad"); });
+      break; }
+    case "fill_blank": {
+      const slots = [...box.querySelectorAll("[data-slot]")];
+      answer = slots.map((s) => (s.tagName === "INPUT" ? s.value : s.dataset.val || "").trim());
+      if (answer.some((a) => !a)) return toast("Isi semua bagian kosong.");
+      const res = answer.map((a, i) => q.answers[i].some((x) => norm(x) === norm(a)));
+      ok = res.every(Boolean);
+      slots.forEach((s, i) => s.classList.add(res[i] ? "ok" : "bad"));
+      break; }
+    case "reorder": {
+      const ans = [...box.querySelectorAll('[data-row="ans"] [data-tok]')];
+      if (ans.length !== q.tokens.length) return toast("Pakai semua kata.");
+      answer = ans.map((b) => q.tokens[+b.dataset.tok]);
+      const accepted = [q.tokens, ...(q.alsoAccept || [])].map((t) => norm(t.join("")));
+      ok = accepted.includes(norm(answer.join("")));
+      ans.forEach((b) => b.classList.add(ok ? "ok" : "bad"));
+      if (!ok) $(".explain", box).innerHTML = `<b>Urutan benar:</b> <span style="font-family:var(--zh)">${esc(q.tokens.join(""))}</span> ${md(q.explanation || "")}`;
+      break; }
+    case "fix_error": {
+      answer = $("input.fix", box).value.trim();
+      if (!answer) return toast("Tulis kalimat yang benar dulu.");
+      ok = q.right.some((r) => norm(r) === norm(answer));
+      if (!ok) $(".explain", box).innerHTML = `<b>Jawaban:</b> <span style="font-family:var(--zh)">${esc(q.right[0])}</span> ${md(q.explanation || "")}`;
+      break; }
+  }
+  showResult(box, ok);
+  record(L, q, ok, answer);
+}
+
+/* =====================================================================
+   Global click handling
+   ===================================================================== */
+document.addEventListener("click", (e) => {
+  const t = e.target;
+  const say = t.closest("[data-say]"); if (say) { play(say.dataset.audio, say.dataset.say); return; }
+  const act = t.closest("[data-act]")?.dataset.act;
+  if (act === "py") { S.showPy = !S.showPy; store.set("py", S.showPy); applyToggles(); return; }
+  if (act === "tr") { S.showTr = !S.showTr; store.set("tr", S.showTr); applyToggles(); return; }
+  if (act === "menu") { $("#side")?.classList.toggle("open"); return; }
+  if (act === "logout") { sb.auth.signOut(); return; }
+  if (t.closest(".side a")) $("#side")?.classList.remove("open");
+
+  const tabBtn = t.closest("[data-tab]");
+  const L = currentRendered();
+  if (tabBtn && L) {
+    S.tab = tabBtn.dataset.tab;
+    if (L === S.lesson) { history.replaceState(null, "", `#/${L.id}/${S.tab}`); renderLesson(); window.scrollTo({ top: 0 }); }
+    else refreshPreview();
+    return;
+  }
+  if (act === "goref" && L) {
+    e.preventDefault();
+    const ref = t.closest("[data-ref]").dataset.ref;
+    const where = (L.vocabulary || []).some((v) => v.vid === ref) ? "vocabulary" : (L.grammar || []).some((g) => g.gid === ref) ? "grammar"
+      : (L.notes || []).some((n) => n.nid === ref) ? "notes" : "texts";
+    S.tab = where; if (L === S.lesson) location.hash = `#/${L.id}/${where}`; else refreshPreview();
+    return;
+  }
+  if (act === "reset-quiz" && L) { S.attempts = {}; L === S.lesson ? renderLesson() : refreshPreview(); return; }
+
+  const box = t.closest(".q"); if (!box || !L) return;
+  const q = (L.exercises || []).find((x) => x.qid === box.dataset.qid); if (!q) return;
+  if (act === "check") return checkQuestion(L, q, box);
+  if (act === "reveal") { $(".model", box)?.classList.remove("hidden"); $(".explain:not(.model)", box)?.classList.remove("hidden"); return; }
+
+  const opt = t.closest("[data-opt]");
+  if (opt && !opt.disabled) { box.querySelectorAll("[data-opt]").forEach((b) => b.classList.remove("sel")); opt.classList.add("sel"); return; }
+  const word = t.closest("[data-word]");
+  if (word && !word.disabled) {
+    const empty = [...box.querySelectorAll("span[data-slot]")].find((s) => !s.dataset.val);
+    if (!empty) return;
+    empty.dataset.val = word.dataset.word; empty.textContent = word.dataset.word; empty._chip = word; word.disabled = true; return;
+  }
+  const slot = t.closest("span[data-slot]");
+  if (slot && slot.dataset.val) { slot._chip && (slot._chip.disabled = false); delete slot.dataset.val; slot.innerHTML = "&nbsp;"; slot.classList.remove("ok", "bad"); return; }
+  const tok = t.closest("[data-tok]");
+  if (tok) {
+    const inAns = tok.parentElement.dataset.row === "ans";
+    box.querySelector(`[data-row="${inAns ? "pool" : "ans"}"]`).appendChild(tok);
+    tok.classList.remove("ok", "bad"); return;
+  }
+});
+/* which lesson object is on screen: the live one, or the editor preview */
+function currentRendered() { return S.view === "editor" ? S.preview : S.lesson; }
+
+/* =====================================================================
+   Login / inactive
+   ===================================================================== */
+function renderLogin() {
+  S.view = "login";
+  $("#app").innerHTML = `<form class="auth" id="login">
+    <h1>Going Up! <span style="font-family:var(--zh)">汉语教程</span></h1>
+    <p style="color:var(--muted);margin:0 0 8px">Masuk dengan akun dari gurumu.</p>
+    <label class="field">Email<input name="email" type="email" required autocomplete="username"></label>
+    <label class="field">Password<input name="password" type="password" required autocomplete="current-password"></label>
+    <div class="err" id="lerr"></div>
+    <button class="btn red" style="width:100%">Masuk</button>
+  </form>`;
+  $("#login").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    $("#lerr").textContent = "";
+    const { error } = await sb.auth.signInWithPassword({ email: f.get("email"), password: f.get("password") });
+    if (error) $("#lerr").textContent = "Email atau password salah.";
+  });
+}
+function renderInactive() {
+  S.view = "inactive";
+  $("#app").innerHTML = `<div class="auth"><h1>Akun belum aktif</h1>
+    <p>Akun <b>${esc(S.session.user.email)}</b> sudah terdaftar, tapi belum diaktifkan oleh guru.</p>
+    <button class="btn ghost" data-act="logout">Keluar</button></div>`;
+}
+
+/* =====================================================================
+   Editor (teachers): paste/edit one JSON document per lesson
+   ===================================================================== */
+const TEMPLATE = {
+  schemaVersion: 2, id: "1a-1", book: "1a", lesson: 1, status: "draft",
+  title: { zh: "你好", py: "nǐ hǎo", id: "Halo" },
+  objectives: ["…"],
+  texts: [{ tid: "t1", kind: "dialogue", track: "", title: { zh: "你好", py: "nǐ hǎo", id: "Halo" }, scene: "",
+    lines: [{ speaker: "A", zh: "你 好 ！", py: "nǐ hǎo !", id: "Halo!", audio: "" }] }],
+  vocabulary: [{ vid: "v01", hanzi: "你", pinyin: "nǐ", pos: ["pron"], meaning: "kamu", examples: [] }],
+  notes: [], grammar: [], exercises: [],
+};
+async function renderEditor(id) {
+  S.view = "editor";
+  let L = TEMPLATE, loadedId = null;
+  if (id) {
+    const { data } = await sb.from("lessons").select("*").eq("id", id).maybeSingle();
+    if (data) { L = fromRow(data); loadedId = data.id; }
+  }
+  const draft = store.get("draft." + (loadedId || "new"), null);
+  renderShell(`<div class="editor">
+    <h2 style="margin:0 0 6px">Editor pelajaran</h2>
+    <p style="color:var(--muted);margin:0 0 10px;font-size:14px">Satu pelajaran = satu dokumen JSON. Validasi dulu, cek pratinjau, lalu simpan.
+      ${draft ? `<br><b>Ada draf yang belum disimpan.</b> <a href="#" data-act="restore">Pulihkan</a>` : ""}</p>
+    <div class="row">
+      <select id="pick"><option value="">— Pelajaran baru —</option>${S.lessons.map((l) => `<option value="${l.id}" ${l.id === loadedId ? "selected" : ""}>${l.id} · ${esc(plain(l.title_zh))}</option>`).join("")}</select>
+      <button class="btn ghost" data-act="tpl">Template</button>
+      <button class="btn ghost" data-act="validate">Validasi</button>
+      <button class="btn ghost" data-act="prev">Pratinjau</button>
+      <button class="btn red" data-act="save">Simpan</button>
+      ${loadedId ? `<button class="btn ghost" data-act="del" style="margin-left:auto;color:var(--bad)">Hapus</button>` : ""}
+    </div>
+    <textarea id="json" spellcheck="false">${esc(JSON.stringify(L, null, 2))}</textarea>
+    <ul class="issues" id="issues"></ul>
+    <div id="pv"></div>
+  </div>`);
+  const ta = $("#json");
+  ta.addEventListener("input", () => store.set("draft." + (loadedId || "new"), ta.value));
+  ta.addEventListener("keydown", (e) => { if (e.key === "Tab") { e.preventDefault(); ta.setRangeText("  ", ta.selectionStart, ta.selectionEnd, "end"); } });
+  $("#pick").addEventListener("change", (e) => { location.hash = "#/editor/" + e.target.value; });
+  $("#main").addEventListener("click", async (e) => {
+    const a = e.target.closest("[data-act]")?.dataset.act;
+    if (!["restore", "tpl", "validate", "prev", "save", "del"].includes(a)) return;
+    if (a === "restore") { e.preventDefault(); ta.value = draft; return; }
+    if (a === "tpl") { if (confirm("Ganti isi editor dengan template?")) ta.value = JSON.stringify(TEMPLATE, null, 2); return; }
+    const parsed = parseEditor(); if (!parsed) return;
+    if (a === "validate") return;
+    if (a === "prev") { S.preview = parsed; S.tab = firstTab(parsed); refreshPreview(); return; }
+    if (a === "save") {
+      const { E } = validateLesson(parsed);
+      if (E.length) return toast("Perbaiki error dulu sebelum menyimpan.");
+      const row = toRow(parsed);
+      const q = loadedId && loadedId !== row.id
+        ? sb.from("lessons").insert(row)            // id changed → new row
+        : sb.from("lessons").upsert(row, { onConflict: "id" });
+      const { error } = await q;
+      if (error) { console.error(error); return toast("Gagal menyimpan: " + error.message, 5000); }
+      store.set("draft." + (loadedId || "new"), null);
+      toast("Tersimpan ✓");
+      await loadIndex(); S.lesson = null;
+      location.hash = "#/editor/" + row.id;
+      if (loadedId === row.id) renderEditor(row.id);
+    }
+    if (a === "del") {
+      if (!confirm(`Hapus ${loadedId}? Nilai latihan siswa untuk pelajaran ini juga terhapus.`)) return;
+      const { error } = await sb.from("lessons").delete().eq("id", loadedId);
+      if (error) return toast("Gagal menghapus: " + error.message, 5000);
+      toast("Dihapus."); await loadIndex(); location.hash = "#/editor";
+    }
+  });
+}
+function parseEditor() {
+  const box = $("#issues"); let L;
+  try { L = JSON.parse($("#json").value); }
+  catch (e) { box.innerHTML = `<li class="e">JSON tidak valid: ${esc(e.message)}</li>`; return null; }
+  const { E, W } = validateLesson(L);
+  box.innerHTML = E.map((m) => `<li class="e">✗ ${esc(m)}</li>`).join("") + W.map((m) => `<li class="w">! ${esc(m)}</li>`).join("")
+    || `<li class="ok">✓ Tidak ada masalah.</li>`;
+  return L;
+}
+function refreshPreview() {
+  const pv = $("#pv"); if (!pv || !S.preview) return;
+  pv.innerHTML = `<div class="preview">${renderLesson(S.preview, { preview: true })}</div>`;
+  wireExercises(S.preview);
+}
+
+/* =====================================================================
+   Students (teachers): activate / deactivate accounts
+   ===================================================================== */
+async function renderStudents() {
+  S.view = "students";
+  const { data, error } = await sb.from("profiles").select("*").order("created_at", { ascending: false });
+  if (error) return renderShell(`<div class="empty">Gagal memuat siswa.</div>`);
+  renderShell(`<h2 style="margin:0 0 6px">Siswa</h2>
+    <p style="color:var(--muted);font-size:14px;margin:0 0 12px">Buat akun siswa di Supabase → Authentication → Users (Add user / Invite), lalu aktifkan di sini.</p>
+    <table class="people"><thead><tr><th>Nama</th><th>Peran</th><th>Status</th><th></th></tr></thead><tbody>
+    ${data.map((p) => `<tr><td>${esc(p.full_name || "—")}</td><td>${esc(p.role)}</td>
+      <td>${p.active ? "✓ aktif" : "nonaktif"}</td>
+      <td>${p.role === "student" ? `<button class="btn ${p.active ? "ghost" : "red"}" data-toggle="${p.id}" data-on="${!p.active}">${p.active ? "Nonaktifkan" : "Aktifkan"}</button>` : ""}</td></tr>`).join("")}
+    </tbody></table>`);
+  $("#main").addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-toggle]"); if (!b) return;
+    b.disabled = true;
+    const { error } = await sb.rpc("set_member_active", { target: b.dataset.toggle, make_active: b.dataset.on === "true" });
+    if (error) { toast("Gagal: " + error.message); b.disabled = false; return; }
+    renderStudents();
+  });
+}
+
+/* auto-pinyin library arrives after first paint → re-render once it's ready */
+document.querySelector('script[src*="pinyin-pro"]')?.addEventListener("load", () => {
+  if (S.view === "lesson" && S.lesson) renderLesson();
+  else if (S.view === "editor") refreshPreview();
+});
+
+boot();
+</script>
+</body>
+</html>

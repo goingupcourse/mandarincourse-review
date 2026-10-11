@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 2,
+  "id": "1a-11",
+  "book": "1a",
+  "lesson": 11,
+  "status": "draft",
+  "title": { "zh": "你 去 哪儿 ？", "py": "nǐ qù nǎr ?", "id": "Kamu mau ke mana?" },
+  "objectives": [
+    "Bertanya dan menjawab tujuan dengan 去 + tempat",
+    "Memakai kata tanya 哪儿",
+    "Memakai 常常 untuk kebiasaan"
+  ],
+
+  "texts": [
+    {
+      "tid": "t1",
+      "kind": "dialogue",
+      "track": "11-1",
+      "title": { "zh": "明天 你 去 哪儿 ？", "py": "míngtiān nǐ qù nǎr ?", "id": "Besok kamu ke mana?" },
+      "scene": "Dua teman sekelas bertemu setelah kelas.",
+      "audio": "",
+      "lines": [
+        { "speaker": "A", "zh": "明天 你 去 哪儿 ？", "py": "míngtiān nǐ qù nǎr ?", "id": "Besok kamu ke mana?", "audio": "" },
+        { "speaker": "B", "zh": "我 去 银行 。 你 呢 ？", "py": "wǒ qù yínháng . nǐ ne ?", "id": "Saya ke bank. Kamu?" },
+        { "speaker": "A", "zh": "我 也 去 银行 ， 我们 一起 去 吧 。", "py": "wǒ yě qù yínháng , wǒmen yìqǐ qù ba .", "id": "Saya juga ke bank, kita pergi bareng yuk." }
+      ]
+    },
+    {
+      "tid": "t2",
+      "kind": "narrative",
+      "track": "11-2",
+      "title": { "zh": "我的 周末", "py": "wǒde zhōumò", "id": "Akhir pekanku" },
+      "lines": [
+        { "p": 0, "zh": "我 周末 常常 去 海边 。", "py": "wǒ zhōumò chángcháng qù hǎibiān .", "id": "Akhir pekan aku sering ke pantai." },
+        { "p": 0, "zh": "海边 人 很 多 ， 很 热闹 。", "py": "hǎibiān rén hěn duō , hěn rènao .", "id": "Di pantai banyak orang, ramai sekali." },
+        { "p": 1, "zh": "有时候 我 跟 朋友 一起 去 ， 有时候 一个人 去 。", "id": "Kadang aku pergi bersama teman, kadang sendirian." }
+      ]
+    }
+  ],
+
+  "vocabulary": [
+    {
+      "vid": "v01", "hanzi": "去", "pinyin": "qù", "pos": ["v"], "meaning": "pergi (ke)",
+      "audio": "",
+      "examples": [ { "zh": "我 去 学校 。", "py": "wǒ qù xuéxiào .", "id": "Saya pergi ke sekolah." } ]
+    },
+    { "vid": "v02", "hanzi": "哪儿", "pinyin": "nǎr", "pos": ["pron"], "meaning": "mana (tempat)" },
+    { "vid": "v03", "hanzi": "银行", "pinyin": "yínháng", "pos": ["n"], "meaning": "bank" },
+    { "vid": "v04", "hanzi": "常（常）", "pinyin": "cháng (cháng)", "pos": ["adv"], "meaning": "sering" },
+    {
+      "vid": "v05", "hanzi": "有时候", "pinyin": "yǒu shíhou", "pos": [], "meaning": "kadang-kadang",
+      "sub": [ { "hanzi": "时候", "pinyin": "shíhou", "pos": ["n"], "meaning": "waktu" } ]
+    },
+    { "vid": "v06", "hanzi": "热闹", "pinyin": "rènao", "pos": ["adj"], "meaning": "ramai, meriah" },
+    { "vid": "v07", "hanzi": "巴厘岛", "pinyin": "Bālí Dǎo", "pos": ["pn"], "meaning": "Pulau Bali", "properNoun": true }
+  ],
+
+  "notes": [
+    {
+      "nid": "n1",
+      "head": { "zh": "我们 一起 去 [[吧]] 。", "py": "wǒmen yìqǐ qù ba .", "id": "Kita pergi bareng yuk." },
+      "explanation": "**吧** di akhir kalimat dipakai untuk **mengajak** atau **menyarankan**, mirip \"yuk\" atau \"ayo\".",
+      "examples": [
+        { "zh": "我们 走 吧 。", "py": "wǒmen zǒu ba .", "id": "Ayo kita jalan." }
+      ]
+    }
+  ],
+
+  "grammar": [
+    {
+      "gid": "g1",
+      "kind": "grammar",
+      "title": "Menanyakan tujuan: 去 + 哪儿",
+      "explanation": "**哪儿** menggantikan *tempat* yang ditanyakan. Urutan kata **tidak berubah** — kata tanya tetap di posisi tempat.",
+      "patterns": [
+        [ { "kind": "slot", "text": "Subjek" }, { "kind": "fixed", "text": "去", "pinyin": "qù" }, { "kind": "fixed", "text": "哪儿", "pinyin": "nǎr" } ],
+        [ { "kind": "slot", "text": "Subjek" }, { "kind": "fixed", "text": "去", "pinyin": "qù" }, { "kind": "slot", "text": "Tempat" } ]
+      ],
+      "examples": [
+        { "zh": "你 去 哪儿 ？", "py": "nǐ qù nǎr ?", "id": "Kamu mau ke mana?" },
+        { "zh": "我 去 银行 。", "py": "wǒ qù yínháng .", "id": "Saya ke bank." }
+      ],
+      "mistakes": [ { "wrong": "哪儿你去？", "right": "你去哪儿？", "why": "Kata tanya tidak dipindah ke depan." } ]
+    },
+    {
+      "gid": "g2",
+      "kind": "usage",
+      "title": "常常",
+      "word": { "hanzi": "常常", "pinyin": "chángcháng", "pos": ["adv"], "meaning": "sering" },
+      "explanation": "Diletakkan **sebelum verba**. Bentuk negatifnya biasanya **不常**, bukan ~~不常常~~.",
+      "examples": [ { "zh": "他 常常 去 图书馆 。", "py": "tā chángcháng qù túshūguǎn .", "id": "Dia sering ke perpustakaan." } ],
+      "compare": {
+        "title": "Perbandingan: 常常 vs 经常",
+        "a": "常常", "b": "经常",
+        "rows": [
+          { "label": "Arti", "a": "sering", "b": "sering, secara rutin" },
+          { "label": "Negatif", "a": "不常", "b": "不经常" }
+        ],
+        "examples": [ { "zh": "我 不 常 喝 咖啡 。", "py": "wǒ bù cháng hē kāfēi .", "id": "Saya tidak sering minum kopi." } ]
+      }
+    },
+    {
+      "gid": "g3",
+      "kind": "phonetics",
+      "title": "Perubahan nada 一",
+      "explanation": "一 dibaca **yí** sebelum nada 4, dan **yì** sebelum nada 1, 2, 3. Contoh: 一起 → *yìqǐ*.",
+      "examples": [ { "zh": "一起", "py": "yìqǐ", "id": "bersama" } ]
+    }
+  ],
+
+  "exercises": [
+    {
+      "qid": "q1", "type": "multiple_choice", "prompt": "Pilih arti yang benar.",
+      "stem": { "zh": "你 去 哪儿 ？", "py": "nǐ qù nǎr ?" },
+      "options": ["Kamu siapa?", "Kamu mau ke mana?", "Kamu di mana?", "Kamu pergi kapan?"],
+      "answer": 1, "ref": "g1",
+      "explanation": "哪儿 = mana (tempat), 去 = pergi."
+    },
+    {
+      "qid": "q2", "type": "fill_blank", "prompt": "Isi bagian yang kosong.",
+      "zh": "明天我___银行。", "id": "Besok saya ke bank.",
+      "answers": [["去"]], "wordBank": ["去", "在", "是"], "ref": "v01"
+    },
+    {
+      "qid": "q3", "type": "pinyin_match", "prompt": "Pasangkan Hanzi dengan pinyin-nya.",
+      "pairs": [
+        { "left": "银行", "right": "yínháng" },
+        { "left": "热闹", "right": "rènao" },
+        { "left": "哪儿", "right": "nǎr" }
+      ]
+    },
+    {
+      "qid": "q4", "type": "tone_select", "prompt": "Pilih nada yang benar.",
+      "hanzi": "去", "options": ["qū", "qú", "qǔ", "qù"], "answer": 3, "ref": "v01"
+    },
+    {
+      "qid": "q5", "type": "reorder", "prompt": "Susun menjadi kalimat yang benar.",
+      "tokens": ["我", "周末", "常常", "去", "海边"],
+      "alsoAccept": [["周末", "我", "常常", "去", "海边"]],
+      "id": "Akhir pekan aku sering ke pantai.", "ref": "g2"
+    },
+    {
+      "qid": "q6", "type": "fix_error", "prompt": "Perbaiki kalimat ini.",
+      "wrong": "我常常不去银行。", "right": ["我不常去银行。"],
+      "explanation": "Negatif dari 常常 adalah **不常**.", "ref": "g2"
+    },
+    {
+      "qid": "q7", "type": "open_answer", "prompt": "Jawab berdasarkan teks.",
+      "question": { "zh": "周末 “我” 常常 去 哪儿 ？", "py": "zhōumò “wǒ” chángcháng qù nǎr ?", "id": "Akhir pekan \"aku\" sering ke mana?" },
+      "model": "我周末常常去海边。", "ref": "t2"
+    }
+  ]
+}
