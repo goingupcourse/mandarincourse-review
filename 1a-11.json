@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "book": "1a",
+  "lesson": 11,
+  "slug": "1a-11",
+  "title": { "zh": "你 去 哪儿 ？", "py": "nǐ qù nǎr ?", "id": "Kamu mau ke mana?" },
+  "objectives": [
+    "Bertanya dan menjawab tujuan seseorang dengan 去 + tempat",
+    "Menggunakan kata tanya 哪儿",
+    "Menyebutkan waktu sederhana: 今天, 明天"
+  ],
+  "status": "draft",
+
+  "vocabulary": [
+    {
+      "vid": "l11-v01",
+      "hanzi": "去",
+      "pinyin": "qù",
+      "type": ["v"],
+      "meaning": "pergi (ke)",
+      "audio": "audio/1a/l11/v-01.mp3",
+      "examples": [
+        { "zh": "我 去 学校 。", "py": "wǒ qù xuéxiào .", "id": "Saya pergi ke sekolah." }
+      ]
+    },
+    {
+      "vid": "l11-v02",
+      "hanzi": "哪儿",
+      "pinyin": "nǎr",
+      "type": ["pron"],
+      "meaning": "mana (tempat)",
+      "examples": [
+        { "zh": "你 在 哪儿 ？", "py": "nǐ zài nǎr ?", "id": "Kamu di mana?" }
+      ]
+    },
+    {
+      "vid": "l11-v03",
+      "hanzi": "银行",
+      "pinyin": "yínháng",
+      "type": ["n"],
+      "meaning": "bank",
+      "examples": []
+    },
+    {
+      "vid": "l11-v04",
+      "hanzi": "明天",
+      "pinyin": "míngtiān",
+      "type": ["n"],
+      "meaning": "besok",
+      "examples": []
+    },
+    {
+      "vid": "l11-v05",
+      "hanzi": "巴厘岛",
+      "pinyin": "Bālí Dǎo",
+      "type": ["pn"],
+      "meaning": "Pulau Bali",
+      "isProperNoun": true,
+      "examples": []
+    }
+  ],
+
+  "grammar": [
+    {
+      "gid": "l11-g01",
+      "title": "Menanyakan tujuan dengan 去 + 哪儿",
+      "explanation": "**哪儿** menggantikan *tempat* yang ditanyakan. Urutan kata **tidak berubah** seperti dalam bahasa Indonesia — kata tanya tetap di posisi tempat, bukan pindah ke depan kalimat.",
+      "patterns": [
+        [
+          { "kind": "slot", "text": "Subjek" },
+          { "kind": "fixed", "text": "去", "pinyin": "qù" },
+          { "kind": "fixed", "text": "哪儿", "pinyin": "nǎr" },
+          { "kind": "fixed", "text": "？" }
+        ],
+        [
+          { "kind": "slot", "text": "Subjek" },
+          { "kind": "fixed", "text": "去", "pinyin": "qù" },
+          { "kind": "slot", "text": "Tempat" }
+        ]
+      ],
+      "examples": [
+        { "zh": "你 去 哪儿 ？", "py": "nǐ qù nǎr ?", "id": "Kamu mau ke mana?" },
+        { "zh": "我 去 银行 。", "py": "wǒ qù yínháng .", "id": "Saya ke bank." }
+      ],
+      "commonMistakes": [
+        { "wrong": "哪儿你去？", "right": "你去哪儿？", "why": "Kata tanya tidak dipindah ke depan kalimat." }
+      ]
+    }
+  ],
+
+  "texts": [
+    {
+      "tid": "l11-t01",
+      "title": { "zh": "明天 你 去 哪儿 ？", "py": "míngtiān nǐ qù nǎr ?", "id": "Besok kamu ke mana?" },
+      "kind": "dialogue",
+      "scene": "Dua teman sekelas bertemu setelah kelas.",
+      "lines": [
+        { "speaker": "A", "zh": "明天 你 去 哪儿 ？", "py": "míngtiān nǐ qù nǎr ?", "id": "Besok kamu ke mana?", "audio": "audio/1a/l11/t1-01.mp3" },
+        { "speaker": "B", "zh": "我 去 银行 。 你 呢 ？", "py": "wǒ qù yínháng . nǐ ne ?", "id": "Saya ke bank. Kamu?" },
+        { "speaker": "A", "zh": "我 也 去 银行 。", "py": "wǒ yě qù yínháng .", "id": "Saya juga ke bank." }
+      ]
+    }
+  ],
+
+  "exercises": [
+    {
+      "qid": "l11-q01",
+      "type": "multiple_choice",
+      "prompt": "Pilih arti yang benar.",
+      "stem": { "zh": "你 去 哪儿 ？", "py": "nǐ qù nǎr ?" },
+      "options": ["Kamu siapa?", "Kamu mau ke mana?", "Kamu di mana?", "Kamu pergi kapan?"],
+      "answer": 1,
+      "ref": "l11-g01"
+    },
+    {
+      "qid": "l11-q02",
+      "type": "fill_blank",
+      "prompt": "Isi bagian yang kosong.",
+      "zh": "明天我___银行。",
+      "id": "Besok saya ke bank.",
+      "answers": [["去"]],
+      "wordBank": ["去", "在", "是"],
+      "ref": "l11-v01"
+    },
+    {
+      "qid": "l11-q03",
+      "type": "pinyin_match",
+      "prompt": "Pasangkan Hanzi dengan pinyin-nya.",
+      "pairs": [
+        { "left": "银行", "right": "yínháng" },
+        { "left": "明天", "right": "míngtiān" },
+        { "left": "哪儿", "right": "nǎr" }
+      ]
+    },
+    {
+      "qid": "l11-q04",
+      "type": "tone_select",
+      "prompt": "Pilih nada yang benar untuk 去.",
+      "hanzi": "去",
+      "options": ["qū", "qú", "qǔ", "qù"],
+      "answer": 3,
+      "ref": "l11-v01"
+    }
+  ]
+}
