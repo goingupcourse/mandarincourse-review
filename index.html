@@ -181,6 +181,15 @@ a.prow{display:grid;grid-template-columns:2.2em minmax(0,1fr) 30% 3.5em;gap:10px
 a.prow .no{color:var(--muted)} a.prow .zh{font-family:var(--zh);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 a.prow .pnum{font-size:13px;color:var(--muted);text-align:right}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0 12px}
+.secnav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:-4px 0 12px}
+.secnav a{font-size:13px;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px;color:var(--ink)}
+.sechead{margin:22px 0 10px;font-size:16px;padding-bottom:6px;border-bottom:2px solid var(--yellow);scroll-margin-top:110px}
+.btn.sm{padding:5px 10px;font-size:13px}
+.hintbox{font-size:14.5px;background:#fffbea;border:1px solid #f3dfb0;border-radius:8px;padding:6px 10px;margin-top:8px}
+.hintbox p{display:inline;margin:0}
+.say.big{width:52px;height:52px;font-size:20px;margin:0}
+.trq{font-size:16px;background:#f6f4f1;border-radius:8px;padding:8px 12px;margin-bottom:8px}
+body.only-wrong .q:not(.was-bad), body.only-wrong .sechead{display:none}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:10px;font-size:14px;z-index:50;max-width:90vw}
 .empty{color:var(--muted);text-align:center;padding:40px 10px}
 </style>
@@ -318,7 +327,7 @@ const sayBtn = (text, audio) => `<button class="say" title="Dengarkan" aria-labe
    Content validation (runs in the Editor before saving)
    ===================================================================== */
 const POS = ["n","pron","v","adj","adv","num","m","prep","conj","part","aux","int","pn","phrase","idiom","onom"];
-const QTYPES = ["multiple_choice","fill_blank","pinyin_match","tone_select","reorder","open_answer","fix_error"];
+const QTYPES = ["multiple_choice","fill_blank","pinyin_match","tone_select","reorder","open_answer","fix_error","listen_choice","translate"];
 function validateLesson(L) {
   const E = [], W = [];
   const err = (m) => E.push(m), warn = (m) => W.push(m);
@@ -395,6 +404,11 @@ function validateLesson(L) {
         if (!blanks) err(`${w}: tidak ada ___ di zh`);
         if (!Array.isArray(q.answers) || q.answers.length !== blanks) err(`${w}: ${blanks} blank tapi ${q.answers?.length ?? 0} daftar jawaban`);
         if (q.wordBank) q.answers?.forEach((a, j) => { if (!a.some((x) => q.wordBank.includes(x))) err(`${w}: jawaban blank ${j + 1} tidak ada di wordBank`); });
+        if (q.wordBank && Array.isArray(q.answers)) {
+          const need = {};
+          q.answers.forEach((a) => { const x = a.find((y) => q.wordBank.includes(y)); if (x) need[x] = (need[x] || 0) + 1; });
+          Object.entries(need).forEach(([x, n]) => { if (q.wordBank.filter((y) => y === x).length < n) err(`${w}: "${x}" dipakai ${n}× tapi hanya ada ${q.wordBank.filter((y) => y === x).length}× di wordBank`); });
+        }
         break; }
       case "pinyin_match":
         if (!Array.isArray(q.pairs) || q.pairs.length < 2) err(`${w}: pairs minimal 2`);
@@ -405,6 +419,15 @@ function validateLesson(L) {
         break;
       case "open_answer":
         if (!q.question?.zh) err(`${w}: question.zh kosong`); else sentence(q.question, `${w}.question`, { needId: false });
+        break;
+      case "listen_choice":
+        if (!q.say) err(`${w}: say (teks yang dibacakan) kosong`);
+        if (!Array.isArray(q.options) || q.options.length < 2) err(`${w}: options minimal 2`);
+        else if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer >= q.options.length) err(`${w}: answer index di luar range`);
+        break;
+      case "translate":
+        if (!q.id) err(`${w}: id (kalimat Indonesia) kosong`);
+        if (!Array.isArray(q.right) || !q.right.length) err(`${w}: right harus array berisi jawaban benar`);
         break;
       case "fix_error":
         if (!q.wrong) err(`${w}: wrong kosong`);
@@ -729,18 +752,30 @@ function viewExercises(L) {
   const done = graded.filter((q) => q.qid in S.attempts).length;
   const ok = graded.filter((q) => S.attempts[q.qid] === true).length;
   const pct = graded.length ? Math.round((ok / graded.length) * 100) : 0;
+  const sections = [];
+  L.exercises.forEach((q) => { if (q.section && !sections.includes(q.section)) sections.push(q.section); });
+  const wrongCount = graded.filter((q) => S.attempts[q.qid] === false).length;
+  let lastSec = null;
   return `${graded.length ? `<div class="score"><span class="sc">Skor: <b>${ok}/${graded.length}</b> (${done} dicoba)</span><div class="bar"><i style="width:${pct}%"></i></div>
       <button class="btn ghost" data-act="reset-quiz" title="Kosongkan jawaban di layar; nilai terakhir tetap tersimpan">Kerjakan lagi</button></div>` : ""}
-    ${L.exercises.map((q, i) => `<div class="q" id="q-${esc(q.qid)}" data-qid="${esc(q.qid)}">
+    ${sections.length > 1 || (L === S.lesson && wrongCount) ? `<div class="secnav">${sections.map((s, i) => `<a href="#" data-act="gosec" data-sec="${i}">${esc(s)}</a>`).join("")}
+      ${L === S.lesson && wrongCount ? `<button class="btn ghost sm" data-act="only-wrong">Ulangi yang salah (${wrongCount})</button>` : ""}</div>` : ""}
+    ${L.exercises.map((q, i) => {
+      const head = q.section && q.section !== lastSec ? `<h3 class="sechead" id="sec-${sections.indexOf(q.section)}">${esc(q.section)}</h3>` : "";
+      if (q.section) lastSec = q.section;
+      const was = q.qid in S.attempts && L === S.lesson ? (S.attempts[q.qid] ? "was-ok" : "was-bad") : "";
+      return head + `<div class="q ${was}" id="q-${esc(q.qid)}" data-qid="${esc(q.qid)}">
       <div class="qp"><span class="qn">${i + 1}.</span>${esc(q.prompt || "")}
         ${q.qid in S.attempts && L === S.lesson ? `<span class="last ${S.attempts[q.qid] ? "ok" : "bad"}">${S.attempts[q.qid] ? "✓ terakhir benar" : "✗ terakhir salah"}</span>` : ""}</div>
       <div class="qbody">${qBody(q)}</div>
       <div class="qact">${q.type === "open_answer" ? `<button class="btn ghost" data-act="reveal">Lihat contoh jawaban</button>`
         : q.type === "pinyin_match" ? "" : `<button class="btn" data-act="check">Cek</button>`}
         <span class="res"></span>
+        ${q.hint ? `<button class="btn ghost sm" data-act="hint">💡 Petunjuk</button>` : ""}
         ${q.ref ? `<a href="#" data-act="goref" data-ref="${esc(q.ref)}" style="font-size:14px;margin-left:auto">↩ Pelajari lagi</a>` : ""}</div>
+      ${q.hint ? `<div class="hintbox hidden">💡 ${md(q.hint)}</div>` : ""}
       <div class="explain hidden">${md(q.explanation || "")}</div>
-    </div>`).join("")}`;
+    </div>`; }).join("")}`;
 }
 function qBody(q) {
   switch (q.type) {
@@ -768,6 +803,14 @@ function qBody(q) {
         ${q.question.id ? `<div class="tr">${esc(q.question.id)}</div>` : ""}
         <textarea class="ans" placeholder="Tulis jawabanmu dalam bahasa Mandarin…"></textarea>
         <div class="explain hidden model"><b>Contoh jawaban:</b> <span style="font-family:var(--zh)">${esc(q.model || "—")}</span></div>`;
+    case "listen_choice":
+      return `<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <button class="say big" title="Dengarkan" data-say="${esc(plain(q.say))}" data-audio="${esc(q.audio || "")}">▶</button>
+          <span class="tr" style="margin:0">Dengarkan, lalu pilih yang kamu dengar.</span></div>
+        <div class="chips">${q.options.map((o, i) => `<button class="chip" data-opt="${i}">${esc(o)}</button>`).join("")}</div>`;
+    case "translate":
+      return `<div class="trq">🇮🇩 ${esc(q.id)}</div>
+        <input class="fix" placeholder="Tulis dalam Hanzi…" autocomplete="off">`;
     case "fix_error":
       return `<div class="fb" style="color:var(--bad)">✗ ${esc(q.wrong)}</div>
         <input class="fix" placeholder="Tulis kalimat yang benar…" autocomplete="off">`;
@@ -826,7 +869,7 @@ function checkQuestion(L, q, box) {
   const st = box._st || {};
   let ok = false, answer = null;
   switch (q.type) {
-    case "multiple_choice": case "tone_select": {
+    case "multiple_choice": case "tone_select": case "listen_choice": {
       const sel = box.querySelector(".sel[data-opt]");
       if (!sel) return toast("Pilih jawaban dulu.");
       answer = +sel.dataset.opt; ok = answer === q.answer;
@@ -850,12 +893,16 @@ function checkQuestion(L, q, box) {
       ans.forEach((b) => b.classList.add(ok ? "ok" : "bad"));
       if (!ok) $(".explain", box).innerHTML = `<b>Urutan benar:</b> <span style="font-family:var(--zh)">${esc(q.tokens.join(""))}</span> ${md(q.explanation || "")}`;
       break; }
-    case "fix_error": {
+    case "fix_error": case "translate": {
       answer = $("input.fix", box).value.trim();
-      if (!answer) return toast("Tulis kalimat yang benar dulu.");
+      if (!answer) return toast("Tulis jawabanmu dulu.");
       ok = q.right.some((r) => norm(r) === norm(answer));
-      if (!ok) $(".explain", box).innerHTML = `<b>Jawaban:</b> <span style="font-family:var(--zh)">${esc(q.right[0])}</span> ${md(q.explanation || "")}`;
+      if (!ok && !/^Jawaban/.test(q.explanation || "")) $(".explain", box).innerHTML = `<b>Jawaban:</b> <span style="font-family:var(--zh)">${esc(q.right[0])}</span> ${md(q.explanation || "")}`;
       break; }
+  }
+  if (!ok && (q.type === "multiple_choice" || q.type === "listen_choice" || q.type === "tone_select") && !/^Jawaban/.test(q.explanation || "")) {
+    const ex = $(".explain", box);
+    ex.innerHTML = `<b>Jawaban benar:</b> <span style="font-family:var(--zh)">${esc(q.options[q.answer])}</span>${q.explanation ? " — " + md(q.explanation).replace(/^<p>|<\/p>$/g, "") : ""}`;
   }
   showResult(box, ok);
   record(L, q, ok, answer);
@@ -890,12 +937,19 @@ document.addEventListener("click", (e) => {
     S.tab = where; if (L === S.lesson) location.hash = `#/${L.id}/${where}`; else refreshPreview();
     return;
   }
+  if (act === "gosec") { e.preventDefault(); document.getElementById("sec-" + t.closest("[data-sec]").dataset.sec)?.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+  if (act === "only-wrong") {
+    const on = document.body.classList.toggle("only-wrong");
+    t.closest("button").textContent = on ? "Tampilkan semua soal" : `Ulangi yang salah (${document.querySelectorAll(".q.was-bad").length})`;
+    return;
+  }
   if (act === "reset-quiz" && L) { L === S.lesson ? renderLesson() : (S.preview && (S.attempts = {}), refreshPreview()); return; }
 
   const box = t.closest(".q"); if (!box || !L) return;
   const q = (L.exercises || []).find((x) => x.qid === box.dataset.qid); if (!q) return;
   if (act === "check") return checkQuestion(L, q, box);
   if (act === "reveal") { $(".model", box)?.classList.remove("hidden"); $(".explain:not(.model)", box)?.classList.remove("hidden"); return; }
+  if (act === "hint") { $(".hintbox", box)?.classList.toggle("hidden"); return; }
 
   const opt = t.closest("[data-opt]");
   if (opt && !opt.disabled) { box.querySelectorAll("[data-opt]").forEach((b) => b.classList.remove("sel")); opt.classList.add("sel"); return; }
